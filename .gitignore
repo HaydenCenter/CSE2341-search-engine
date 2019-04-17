@@ -6,3 +6,6 @@ build-*/
 
 # Autosaves
 *~
+
+# Data Set
+scotus/
