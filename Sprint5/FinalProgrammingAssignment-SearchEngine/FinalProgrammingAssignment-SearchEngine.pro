@@ -5,7 +5,10 @@ CONFIG -= qt
 
 SOURCES += \
         main.cpp \
-    documenthandler.cpp
+    documenthandler.cpp \
+    avltree.cpp
 
 HEADERS += \
-    documenthandler.h
+    documenthandler.h \
+    avlnode.h \
+    avltree.h
