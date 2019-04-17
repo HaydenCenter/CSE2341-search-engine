@@ -1,9 +1,11 @@
 #include <iostream>
+#include "documenthandler.h"
 
 using namespace std;
 
-int main()
+int main(int argc, char* argv)
 {
-    cout << "Hello World!" << endl;
+    DocumentHandler dh;
+    dh.CreateFilesVector(argv[1]);
     return 0;
 }

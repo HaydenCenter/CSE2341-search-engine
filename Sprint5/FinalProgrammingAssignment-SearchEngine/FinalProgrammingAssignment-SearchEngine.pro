@@ -4,4 +4,8 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
-        main.cpp
+        main.cpp \
+    documenthandler.cpp
+
+HEADERS += \
+    documenthandler.h
