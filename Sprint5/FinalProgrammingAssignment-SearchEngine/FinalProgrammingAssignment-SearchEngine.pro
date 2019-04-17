@@ -6,9 +6,16 @@ CONFIG -= qt
 SOURCES += \
         main.cpp \
     documenthandler.cpp \
-    avltree.cpp
+    avltree.cpp \
+    porter2_stemmer.cpp
 
 HEADERS += \
     documenthandler.h \
     avlnode.h \
-    avltree.h
+    avltree.h \
+    util/hash.h \
+    util/string_view.h \
+    porter2_stemmer.h
+
+DISTFILES += \
+    ../stopwords.txt
