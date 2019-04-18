@@ -12,6 +12,8 @@
 #include <string>
 #include <json.hpp>
 #include "porter2_stemmer.h"
+#include "indexinterface.h"
+#include "word.h"
 using json = nlohmann::json;
 using namespace std;
 
@@ -24,7 +26,7 @@ public:
     void parse();
     void save();
     void load();
-    void LoadIntoIndex();
+    void LoadIntoIndex(IndexInterface&);
 private:
     map<string,map<int,int>> wordMap;
     vector<string> files;

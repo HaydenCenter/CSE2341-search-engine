@@ -158,7 +158,10 @@ void DocumentHandler::load()
 }
 
 //Function to load data from wordmap to the IndexInterface
-void DocumentHandler::LoadIntoIndex() {
-
+void DocumentHandler::LoadIntoIndex(IndexInterface& theIndex) {
+    for(auto i = wordMap.begin(); i != wordMap.end(); i++ ) {
+        Word w(i->first, i->second);
+        theIndex.insert(w);
+    }
 }
 
