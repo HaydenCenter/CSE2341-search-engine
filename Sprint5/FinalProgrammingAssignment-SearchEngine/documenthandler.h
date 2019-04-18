@@ -23,14 +23,17 @@ public:
     DocumentHandler();
     void ReadInStopWords();
     void CreateFilesVector(char*);
-    void parse();
+    void Parse(IndexInterface<Word>*&);
     void SavePersistantIndex();
-    void LoadIntoIndexAfterParsing(IndexInterface&);
-    void LoadIntoIndexFromDisk(IndexInterface&);
+    void LoadIntoIndexAfterParsing(IndexInterface<Word>*&);
+    void LoadIntoIndexFromDisk(IndexInterface<Word>*&);
+    void PrintDemoInfo(IndexInterface<Word>*&,char*);
 private:
     map<string,map<int,int>> wordMap;
     vector<string> files;
     set<string> stopwords;
+    int numDocumentsParsed;
+    int numWordsInIndex;
 };
 
 #endif // DOCUMENTHANDLER_H

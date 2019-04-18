@@ -3,6 +3,8 @@
 DocumentHandler::DocumentHandler()
 {
     ReadInStopWords();
+    numWordsInIndex = 0;
+    numDocumentsParsed = 0;
 }
 
 //Function to read in stop words and save them to a set
@@ -41,7 +43,7 @@ void DocumentHandler::CreateFilesVector(char* c) {
 }
 
 //Function to parse all documents and save data into a map
-void DocumentHandler::parse()
+void DocumentHandler::Parse(IndexInterface<Word>*& theIndex)
 {
     //Used to parse a small random sample
     srand(time(NULL));
@@ -57,7 +59,7 @@ void DocumentHandler::parse()
         inFile.open("../scotus/" + files[i]);
         if(!inFile.is_open())
             throw exception();
-
+        numDocumentsParsed++;
         //Stores entire file into json object
         inFile >> j;
 
@@ -111,6 +113,8 @@ void DocumentHandler::parse()
         }
         cout << endl;
     }
+    SavePersistantIndex();
+    LoadIntoIndexAfterParsing(theIndex);
 }
 
 //Function to save a copy of the persistant index to disk after parsing
@@ -131,15 +135,16 @@ void DocumentHandler::SavePersistantIndex()
 }
 
 //Function to load data from wordmap to the IndexInterface only after parsing
-void DocumentHandler::LoadIntoIndexAfterParsing(IndexInterface& theIndex) {
+void DocumentHandler::LoadIntoIndexAfterParsing(IndexInterface<Word>*& theIndex) {
     for(auto i = wordMap.begin(); i != wordMap.end(); i++ ) {
         Word w(i->first, i->second);
-        theIndex.insert(w);
+        theIndex->insert(w);
+        numWordsInIndex++;
     }
 }
 
 //Function to load data from saved persistant index to the IndexInterface
-void DocumentHandler::LoadIntoIndexFromDisk(IndexInterface& theIndex) {
+void DocumentHandler::LoadIntoIndexFromDisk(IndexInterface<Word>*& theIndex) {
     ifstream inFile;
     inFile.open("SavedIndex");
     if(!inFile.is_open())
@@ -162,8 +167,20 @@ void DocumentHandler::LoadIntoIndexFromDisk(IndexInterface& theIndex) {
             tempMap.emplace(page,freq);
         }
         Word w(temp,tempMap);
-        theIndex.insert(w);
+        theIndex->insert(w);
         getline(inFile,buffer);
     }
+}
+
+//Function to print out information required for Monday's demo
+void DocumentHandler::PrintDemoInfo(IndexInterface<Word>*& theIndex, char* word) {
+    cout << "Number of documents parsed: " << numDocumentsParsed << endl;
+    cout << "Number of unique words in the index :" << numWordsInIndex << endl;
+
+    string wordToFind(word);
+    Word w(wordToFind);
+    Word searchResult = theIndex->search(w);
+
+    cout << "The word " << searchResult.getWordText() << " is found in " << searchResult.getMap().size() << " documents." << endl;;
 }
 

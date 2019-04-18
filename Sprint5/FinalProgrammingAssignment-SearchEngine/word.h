@@ -10,7 +10,9 @@ public:
     Word();
     Word(string);
     Word(string,map<int,int>);
-    bool operator==(Word);
+    bool operator==(const Word) const;
+    bool operator<(const Word) const;
+    bool operator>(const Word) const;
     string getWordText();
     void setWordText(string);
     void setMap(map<int,int>);
