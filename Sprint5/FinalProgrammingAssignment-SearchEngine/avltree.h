@@ -1,4 +1,4 @@
-#ifndef AVLTREE_H
+/*#ifndef AVLTREE_H
 #define AVLTREE_H
 #include "avlnode.h"
 #include <stdexcept>
@@ -31,3 +31,4 @@ private:
 };
 
 #endif // AVLTREE_H
+*/

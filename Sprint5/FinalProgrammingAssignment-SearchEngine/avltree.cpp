@@ -1,4 +1,4 @@
-#include "avltree.h"
+/*#include "avltree.h"
 
 template <class T>
 AvlTree::AvlTree()
@@ -147,3 +147,4 @@ void AvlTree::doubleWithRightChild(AvlNode*& k1) {
     rotateWithLeftChild(k1->right);
     rotateWithRightChild(k1);
 }
+*/
