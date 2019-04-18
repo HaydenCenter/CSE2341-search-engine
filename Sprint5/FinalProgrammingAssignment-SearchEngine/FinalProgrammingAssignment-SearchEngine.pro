@@ -15,7 +15,8 @@ HEADERS += \
     avltree.h \
     util/hash.h \
     util/string_view.h \
-    porter2_stemmer.h
+    porter2_stemmer.h \
+    json.hpp
 
 DISTFILES += \
     ../stopwords.txt
