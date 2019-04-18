@@ -2,6 +2,18 @@
 
 DocumentHandler::DocumentHandler()
 {
+    ifstream inFile;
+    inFile.open("../stopwords.txt");
+    if(!inFile.is_open())
+    {
+        throw exception();
+    }
+    string temp;
+    while(!inFile.eof())
+    {
+        inFile >> temp;
+        stopwords.emplace(temp);
+    }
 
 }
 
@@ -27,12 +39,14 @@ void DocumentHandler::CreateFilesVector(char* c) {
 
 void DocumentHandler::parse()
 {
+    map<string,map<int,int>> wordMap;
     //Used to parse a small random sample
     srand(time(NULL));
     int x = rand() % 68390;
 
-    // To parse full dataset:
-    // (int i = 0; i < files.size(); i++)
+    //Full Data Set:
+  //for(int i = 0; i < files.size(); i++)
+    //Random Sample Set:
     for(int i = x; i < x + 100; i++)
     {
         json j;
@@ -48,22 +62,52 @@ void DocumentHandler::parse()
 
         //Stores document ID to emplace into map
         int id = j["id"];
-        cout << id << endl;
+
+        //Parses file as plain text or html if plain text is empty
         string str = j["plain_text"];
         if(str == "")
             str = j["html"];
+
+        //Stems word
         istringstream iss(str);
         while(!iss.eof())
         {
             string word;
             iss >> word;
-            cout << word << " -> ";
+            //cout << word << " -> "; //Remove after done debugging
             Porter2Stemmer::trim(word);
-            cout << word << " -> ";
+            //cout << word << " -> "; //Remove after done debugging
             Porter2Stemmer::stem(word);
-            cout << word << endl;
+            //cout << word << endl;   //Remove after done debugging
+
+            //Implement insertion to index here
+            if(stopwords.find(word) == stopwords.end())
+            {
+                if(wordMap.find(word) == wordMap.end())
+                {
+                    map<int,int> temp;
+                    wordMap.emplace(word,temp);
+                }
+                map<int,int>* innerMap = &(wordMap.find(word)->second);
+                if(innerMap->find(id) == innerMap->end())
+                {
+                    innerMap->emplace(id,0);
+                }
+                wordMap.find(word)->second.find(id)->second++;
+            }
         }
 
-        cout << endl << files[i] << endl << endl;
+        cout << endl << files[i] << endl << id << endl << endl;
+    }
+    for(auto outer = wordMap.begin(); outer != wordMap.end(); outer++)
+    {
+        cout << outer->first << " = ";
+        for(auto inner = outer->second.begin(); inner != outer->second.end(); inner++)
+        {
+            cout << inner->first;
+            if(inner != --outer->second.end())
+                cout << ", ";
+        }
+        cout << endl;
     }
 }
