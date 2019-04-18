@@ -19,10 +19,12 @@ class DocumentHandler
 {
 public:
     DocumentHandler();
+    void ReadInStopWords();
     void CreateFilesVector(char*);
     void parse();
     void save();
     void load();
+    void LoadIntoIndex();
 private:
     map<string,map<int,int>> wordMap;
     vector<string> files;

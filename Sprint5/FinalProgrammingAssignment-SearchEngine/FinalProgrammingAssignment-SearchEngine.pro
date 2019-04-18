@@ -6,7 +6,8 @@ CONFIG -= qt
 SOURCES += \
         main.cpp \
     documenthandler.cpp \
-    porter2_stemmer.cpp
+    porter2_stemmer.cpp \
+    word.cpp
 
 HEADERS += \
     documenthandler.h \
@@ -16,7 +17,8 @@ HEADERS += \
     util/string_view.h \
     porter2_stemmer.h \
     json.hpp \
-    indexinterface.h
+    indexinterface.h \
+    word.h
 
 DISTFILES += \
     ../stopwords.txt

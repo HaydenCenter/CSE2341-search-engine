@@ -2,21 +2,24 @@
 
 DocumentHandler::DocumentHandler()
 {
+    ReadInStopWords();
+}
+
+//Function to read in stop words and save them to a set
+void DocumentHandler::ReadInStopWords() {
     ifstream inFile;
     inFile.open("../stopwords.txt");
     if(!inFile.is_open())
-    {
         throw exception();
-    }
     string temp;
     while(!inFile.eof())
     {
         inFile >> temp;
         stopwords.emplace(temp);
     }
-
 }
 
+//Function to handle a folder of files and save individual file names in a vector
 void DocumentHandler::CreateFilesVector(char* c) {
     string extn = ".json";
     DIR *dir;
@@ -37,6 +40,7 @@ void DocumentHandler::CreateFilesVector(char* c) {
     }
 }
 
+//Function to parse all documents and save data into a map
 void DocumentHandler::parse()
 {
     //Used to parse a small random sample
@@ -52,9 +56,7 @@ void DocumentHandler::parse()
         ifstream inFile;
         inFile.open("../scotus/" + files[i]);
         if(!inFile.is_open())
-        {
             throw exception();
-        }
 
         //Stores entire file into json object
         inFile >> j;
@@ -111,6 +113,7 @@ void DocumentHandler::parse()
     }
 }
 
+//Function to save a copy of the persistant index to disk after parsing
 void DocumentHandler::save()
 {
     ofstream outFile;
@@ -127,6 +130,7 @@ void DocumentHandler::save()
     outFile.close();
 }
 
+//Function to load a persistant index and save data into a map
 void DocumentHandler::load()
 {
     ifstream inFile;
@@ -152,3 +156,9 @@ void DocumentHandler::load()
         getline(inFile,buffer);
     }
 }
+
+//Function to load data from wordmap to the IndexInterface
+void DocumentHandler::LoadIntoIndex() {
+
+}
+
