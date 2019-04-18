@@ -26,7 +26,8 @@ public:
     void parse();
     void save();
     void load();
-    void LoadIntoIndex(IndexInterface&);
+    void LoadIntoIndexAfterParsing(IndexInterface&);
+    void LoadIntoIndexFromDisk(IndexInterface&);
 private:
     map<string,map<int,int>> wordMap;
     vector<string> files;

@@ -130,8 +130,7 @@ void DocumentHandler::save()
     outFile.close();
 }
 
-//Function to load a persistant index and save data into a map
-void DocumentHandler::load()
+/*void DocumentHandler::load()
 {
     ifstream inFile;
     inFile.open("savedIndex");
@@ -155,13 +154,42 @@ void DocumentHandler::load()
         }
         getline(inFile,buffer);
     }
-}
+}*/      //check out LoadIntoIndexFromDisk - this way we skip the step of saving to the map first
 
-//Function to load data from wordmap to the IndexInterface
-void DocumentHandler::LoadIntoIndex(IndexInterface& theIndex) {
+//Function to load data from wordmap to the IndexInterface only after parsing
+void DocumentHandler::LoadIntoIndexAfterParsing(IndexInterface& theIndex) {
     for(auto i = wordMap.begin(); i != wordMap.end(); i++ ) {
         Word w(i->first, i->second);
         theIndex.insert(w);
+    }
+}
+
+//Function to load data from saved persistant index to the IndexInterface
+void DocumentHandler::LoadIntoIndexFromDisk(IndexInterface& theIndex) {
+    ifstream inFile;
+    inFile.open("SavedIndex");
+    if(!inFile.is_open())
+        throw exception();
+
+    string buffer;
+    getline(inFile,buffer);
+    while(!inFile.eof())
+    {
+        istringstream iss(buffer);
+        string temp;
+        iss >> temp;
+        map<int,int> tempMap;
+        while(!iss.eof())
+        {
+            int page;
+            int freq;
+            iss >> page;
+            iss >> freq;
+            tempMap.emplace(page,freq);
+        }
+        Word w(temp,tempMap);
+        theIndex.insert(w);
+        getline(inFile,buffer);
     }
 }
 
