@@ -6,7 +6,6 @@ CONFIG -= qt
 SOURCES += \
         main.cpp \
     documenthandler.cpp \
-    avltree.cpp \
     porter2_stemmer.cpp
 
 HEADERS += \
@@ -16,7 +15,8 @@ HEADERS += \
     util/hash.h \
     util/string_view.h \
     porter2_stemmer.h \
-    json.hpp
+    json.hpp \
+    indexinterface.h
 
 DISTFILES += \
     ../stopwords.txt
