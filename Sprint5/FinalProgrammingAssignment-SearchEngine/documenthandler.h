@@ -24,8 +24,7 @@ public:
     void ReadInStopWords();
     void CreateFilesVector(char*);
     void parse();
-    void save();
-    void load();
+    void SavePersistantIndex();
     void LoadIntoIndexAfterParsing(IndexInterface&);
     void LoadIntoIndexFromDisk(IndexInterface&);
 private:
