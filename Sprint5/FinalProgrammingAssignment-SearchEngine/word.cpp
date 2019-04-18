@@ -14,8 +14,16 @@ Word::Word(string s, map<int,int> m) {
     frequencyMap = m;
 }
 
-bool Word::operator==(Word wordToCompare) {
+bool Word::operator==(const Word wordToCompare) const {
     return wordText == wordToCompare.wordText;
+}
+
+bool Word::operator<(const Word rhs) const {
+    return wordText < rhs.wordText;
+}
+
+bool Word::operator>(const Word rhs) const {
+    return wordText > rhs.wordText;
 }
 
 string Word::getWordText() {

@@ -5,6 +5,8 @@
 #include <sstream>
 #include "porter2_stemmer.h"
 #include <chrono>
+#include "avltree.h"
+#include "indexinterface.h"
 
 using namespace std::chrono;
 
@@ -16,11 +18,10 @@ int main(int argc, char* argv[])
     for(int i = 0; i < argc; i++)
         cout << argv[i];
 
+    IndexInterface<Word>* theIndex = new AvlTree<Word>;
     DocumentHandler dh;
     dh.CreateFilesVector(argv[1]);
-    dh.parse();
-    dh.save();
-    dh.load();
+    dh.Parse(theIndex);
 
     auto end = high_resolution_clock::now();
 

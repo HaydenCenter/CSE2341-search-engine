@@ -41,7 +41,7 @@ void DocumentHandler::CreateFilesVector(char* c) {
 }
 
 //Function to parse all documents and save data into a map
-void DocumentHandler::parse()
+void DocumentHandler::Parse(IndexInterface<Word>*& theIndex)
 {
     //Used to parse a small random sample
     srand(time(NULL));
@@ -111,10 +111,12 @@ void DocumentHandler::parse()
         }
         cout << endl;
     }
+    SavePersistantIndex();
+    LoadIntoIndexAfterParsing(theIndex);
 }
 
 //Function to save a copy of the persistant index to disk after parsing
-void DocumentHandler::save()
+void DocumentHandler::SavePersistantIndex()
 {
     ofstream outFile;
     outFile.open("savedIndex");
@@ -157,15 +159,15 @@ void DocumentHandler::save()
 }*/      //check out LoadIntoIndexFromDisk - this way we skip the step of saving to the map first
 
 //Function to load data from wordmap to the IndexInterface only after parsing
-void DocumentHandler::LoadIntoIndexAfterParsing(IndexInterface& theIndex) {
+void DocumentHandler::LoadIntoIndexAfterParsing(IndexInterface<Word>*& theIndex) {
     for(auto i = wordMap.begin(); i != wordMap.end(); i++ ) {
         Word w(i->first, i->second);
-        theIndex.insert(w);
+        theIndex->insert(w);
     }
 }
 
 //Function to load data from saved persistant index to the IndexInterface
-void DocumentHandler::LoadIntoIndexFromDisk(IndexInterface& theIndex) {
+void DocumentHandler::LoadIntoIndexFromDisk(IndexInterface<Word>*& theIndex) {
     ifstream inFile;
     inFile.open("SavedIndex");
     if(!inFile.is_open())
@@ -188,7 +190,7 @@ void DocumentHandler::LoadIntoIndexFromDisk(IndexInterface& theIndex) {
             tempMap.emplace(page,freq);
         }
         Word w(temp,tempMap);
-        theIndex.insert(w);
+        theIndex->insert(w);
         getline(inFile,buffer);
     }
 }

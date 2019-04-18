@@ -22,7 +22,7 @@ public:
 private:
     AvlNode<T>* root;
     int height(AvlNode<T>*) const;
-    T max(T,T) const;
+    int max(int,int) const;
     AvlNode<T>* findMin(AvlNode<T>*);
     AvlNode<T>* findMax(AvlNode<T>*);
     bool contains(const T&, AvlNode<T>*) const;
@@ -92,7 +92,7 @@ int AvlTree<T>::height(AvlNode<T>* t) const {
 }
 
 template <class T>
-T AvlTree<T>::max(T lhs, T rhs) const {
+int AvlTree<T>::max(int lhs, int rhs) const {
     return lhs > rhs ? lhs : rhs;
 }
 

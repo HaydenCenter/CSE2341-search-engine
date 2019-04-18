@@ -23,11 +23,11 @@ public:
     DocumentHandler();
     void ReadInStopWords();
     void CreateFilesVector(char*);
-    void parse();
-    void save();
+    void Parse(IndexInterface<Word>*&);
+    void SavePersistantIndex();
     void load();
-    void LoadIntoIndexAfterParsing(IndexInterface&);
-    void LoadIntoIndexFromDisk(IndexInterface&);
+    void LoadIntoIndexAfterParsing(IndexInterface<Word>*&);
+    void LoadIntoIndexFromDisk(IndexInterface<Word>*&);
 private:
     map<string,map<int,int>> wordMap;
     vector<string> files;
