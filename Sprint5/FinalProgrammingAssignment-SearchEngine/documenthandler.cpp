@@ -39,7 +39,6 @@ void DocumentHandler::CreateFilesVector(char* c) {
 
 void DocumentHandler::parse()
 {
-    map<string,map<int,int>> wordMap;
     //Used to parse a small random sample
     srand(time(NULL));
     int x = rand() % 68390;
@@ -81,7 +80,7 @@ void DocumentHandler::parse()
             //cout << word << endl;   //Remove after done debugging
 
             //Implement insertion to index here
-            if(stopwords.find(word) == stopwords.end())
+            if(stopwords.find(word) == stopwords.end() && word != "")
             {
                 if(wordMap.find(word) == wordMap.end())
                 {
@@ -109,5 +108,47 @@ void DocumentHandler::parse()
                 cout << ", ";
         }
         cout << endl;
+    }
+}
+
+void DocumentHandler::save()
+{
+    ofstream outFile;
+    outFile.open("savedIndex");
+    for(auto outer = wordMap.begin(); outer != wordMap.end(); outer++)
+    {
+        outFile << outer->first << " ";
+        for(auto inner = outer->second.begin(); inner != outer->second.end(); inner++)
+        {
+            outFile << inner->first << " " << inner->second << " ";
+        }
+        outFile << endl;
+    }
+    outFile.close();
+}
+
+void DocumentHandler::load()
+{
+    ifstream inFile;
+    inFile.open("savedIndex");
+    wordMap.clear();
+    string buffer;
+    getline(inFile,buffer);
+    while(!inFile.eof())
+    {
+        istringstream iss(buffer);
+        string temp;
+        iss >> temp;
+        map<int,int> tempMap;
+        wordMap.emplace(temp,tempMap);
+        while(!iss.eof())
+        {
+            int page;
+            int freq;
+            iss >> page;
+            iss >> freq;
+            wordMap.find(temp)->second.emplace(page,freq);
+        }
+        getline(inFile,buffer);
     }
 }

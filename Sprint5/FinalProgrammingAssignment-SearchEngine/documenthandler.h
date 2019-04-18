@@ -21,7 +21,10 @@ public:
     DocumentHandler();
     void CreateFilesVector(char*);
     void parse();
+    void save();
+    void load();
 private:
+    map<string,map<int,int>> wordMap;
     vector<string> files;
     set<string> stopwords;
 };

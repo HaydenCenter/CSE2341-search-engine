@@ -19,6 +19,8 @@ int main(int argc, char* argv[])
     DocumentHandler dh;
     dh.CreateFilesVector(argv[1]);
     dh.parse();
+    dh.save();
+    dh.load();
 
     auto end = high_resolution_clock::now();
 
