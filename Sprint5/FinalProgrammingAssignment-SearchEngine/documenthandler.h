@@ -1,6 +1,7 @@
 #ifndef DOCUMENTHANDLER_H
 #define DOCUMENTHANDLER_H
 #include <iostream>
+#include <set>
 #include <cstdlib>
 #include <ctime>
 #include <fstream>
@@ -22,6 +23,7 @@ public:
     void parse();
 private:
     vector<string> files;
+    set<string> stopwords;
 };
 
 #endif // DOCUMENTHANDLER_H
