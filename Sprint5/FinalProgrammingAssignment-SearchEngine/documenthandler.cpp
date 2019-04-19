@@ -44,9 +44,9 @@ void DocumentHandler::parse()
     int x = rand() % 68390;
 
     //Full Data Set:
-  //for(int i = 0; i < files.size(); i++)
+    for(int i = 0; i < files.size(); i++)
     //Random Sample Set:
-    for(int i = x; i < x + 100; i++)
+    //for(int i = x; i < x + 100; i++)
     {
         json j;
         ifstream inFile;
@@ -58,6 +58,7 @@ void DocumentHandler::parse()
 
         //Stores entire file into json object
         inFile >> j;
+        inFile.close();
 
         //Stores document ID to emplace into map
         int id = j["id"];
@@ -69,17 +70,22 @@ void DocumentHandler::parse()
 
         //Stems word
         istringstream iss(str);
+        map<string,string> stemMap;
         while(!iss.eof())
         {
             string word;
             iss >> word;
-            //cout << word << " -> "; //Remove after done debugging
-            Porter2Stemmer::trim(word);
-            //cout << word << " -> "; //Remove after done debugging
-            Porter2Stemmer::stem(word);
-            //cout << word << endl;   //Remove after done debugging
 
-            //Implement insertion to index here
+            if(stemMap.find(word) == stemMap.end())
+            {
+                string origWord = word;
+                Porter2Stemmer::trim(word);
+                Porter2Stemmer::stem(word);
+                stemMap.emplace(origWord,word);
+            }
+            else
+                word = stemMap.find(word)->second;
+
             if(stopwords.find(word) == stopwords.end() && word != "")
             {
                 if(wordMap.find(word) == wordMap.end())
