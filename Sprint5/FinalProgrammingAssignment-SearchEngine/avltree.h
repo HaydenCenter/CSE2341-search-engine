@@ -115,24 +115,25 @@ bool AvlTree<T>::contains(const T& value, AvlNode<T>* nodePtr) const {
     if(value > nodePtr->element) {
         if(nodePtr->right == nullptr)
             return false;
-        contains(value,nodePtr->right);
+        return contains(value,nodePtr->right);
     }
     else if(value < nodePtr->element) {
         if(nodePtr->left == nullptr)
             return false;
-        contains(value,nodePtr->left);
+        return contains(value,nodePtr->left);
     }
-    else if(value == nodePtr->element)
+    else
         return true;
 }
 
 template <class T>
 void AvlTree<T>::makeEmpty(AvlNode<T>*& nodePtr) {
-    if(nodePtr->right != nullptr)
+    if(nodePtr)
+    {
         makeEmpty(nodePtr->right);
-    if(nodePtr->left != nullptr)
         makeEmpty(nodePtr->left);
-    delete nodePtr;
+        delete nodePtr;
+    }
 }
 
 template <class T>
@@ -142,14 +143,14 @@ T AvlTree<T>::search(T value, AvlNode<T>* nodePtr) {
     if(value > nodePtr->element) {
         if(nodePtr->right == nullptr)
             throw invalid_argument("Value is not present in the AvlTree");
-        search(value,nodePtr->right);
+        return search(value,nodePtr->right);
     }
     else if(value < nodePtr->element) {
         if(nodePtr->left == nullptr)
             throw invalid_argument("Value is not present in the AvlTree");
-        search(value,nodePtr->left);
+        return search(value,nodePtr->left);
     }
-    else if(value == nodePtr->element)
+    else
         return nodePtr->element;
 }
 
@@ -175,7 +176,7 @@ void AvlTree<T>::insert(const T& x, AvlNode<T>*& t) {
                 doubleWithRightChild(t); //Case3
         }
     }
-    else;
+    else {}
     t->height = max(height(t->left), height(t->right)) + 1;
 }
 

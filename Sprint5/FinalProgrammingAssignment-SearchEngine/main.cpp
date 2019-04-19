@@ -12,6 +12,7 @@ using namespace std::chrono;
 
 int main(int argc, char* argv[])
 {
+    auto start = high_resolution_clock::now();
 
     IndexInterface<Word>* theIndex = new AvlTree<Word>;
     DocumentHandler dh;
@@ -19,4 +20,10 @@ int main(int argc, char* argv[])
     dh.Parse(theIndex);
     dh.PrintDemoInfo(theIndex,argv[2]);
 
+    auto end = high_resolution_clock::now();
+
+    auto duration = duration_cast<microseconds>(end - start);
+    cout << duration.count()/1000000.0 << endl;
+
+    delete theIndex;
 }

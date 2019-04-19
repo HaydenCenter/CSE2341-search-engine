@@ -2,7 +2,7 @@
 
 Word::Word()
 {
-
+    wordText = "";
 }
 
 Word::Word(string s) {
