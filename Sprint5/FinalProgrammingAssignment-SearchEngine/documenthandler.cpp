@@ -48,9 +48,9 @@ void DocumentHandler::Parse(IndexInterface<Word>*& theIndex)
     int x = rand() % 68390;
 
     //Full Data Set:
-    for(int i = 0; i < files.size(); i++)
+    //for(int i = 0; i < files.size(); i++)
     //Random Sample Set:
-    //for(int i = x; i < x + 100; i++)
+    for(int i = x; i < x + 100; i++)
     {
         json j;
         ifstream inFile;
