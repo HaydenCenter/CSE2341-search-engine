@@ -23,7 +23,7 @@ public:
     DocumentHandler();
     void getStopwords();
     void getFiles(char*);
-    void parse(IndexInterface<Word>*&);
+    void parse(IndexInterface<Word>*&, char*[]);
     void saveIndex();
     void loadIndex(IndexInterface<Word>*&);
     void PrintDemoInfo(IndexInterface<Word>*&,char*);

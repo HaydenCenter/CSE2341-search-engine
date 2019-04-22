@@ -45,7 +45,7 @@ void DocumentHandler::getFiles(char* c)
 }
 
 //Function to parse all documents and save data into a map
-void DocumentHandler::parse(IndexInterface<Word>*& theIndex)
+void DocumentHandler::parse(IndexInterface<Word>*& theIndex, char* argv[])
 {
     //Used to parse a small random sample
     srand(time(NULL));
@@ -59,7 +59,7 @@ void DocumentHandler::parse(IndexInterface<Word>*& theIndex)
     {
         json j;
         ifstream inFile;
-        inFile.open("../scotus/" + files[i]);
+        inFile.open(argv[1] + files[i]);
         if(!inFile.is_open())
             throw exception();
         numDocumentsParsed++;

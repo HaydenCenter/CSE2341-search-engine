@@ -22,12 +22,12 @@ int main(int argc, char* argv[])
     DocumentHandler dh;
     dh.getFiles(argv[1]);
 
-    dh.parse(theIndex);
+    dh.parse(theIndex,argv);
     //auto end = high_resolution_clock::now();
     //auto duration = duration_cast<microseconds>(end - start);
     //cout << "Runtime: " << duration.count()/1000000.0 << " seconds" << endl;
 
-    dh.loadIndex(theIndex);
+    //dh.loadIndex(theIndex);
     dh.PrintDemoInfo(theIndex,argv[2]);
 
     auto end = high_resolution_clock::now();
