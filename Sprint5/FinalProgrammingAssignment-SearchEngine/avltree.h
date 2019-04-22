@@ -12,6 +12,7 @@ class AvlTree : public IndexInterface<T>
 public:
     AvlTree();
     ~AvlTree();
+    int getSize();
     const T& findMin() const;
     const T& findMax() const;
     bool contains(const T&) const;
@@ -19,8 +20,11 @@ public:
     void makeEmpty();
     void insert(const T&);
     T search(T);
+    void print();
+    int count();
 private:
     AvlNode<T>* root;
+    int size;
     int height(AvlNode<T>*) const;
     int max(int,int) const;
     AvlNode<T>* findMin(AvlNode<T>*);
@@ -28,6 +32,8 @@ private:
     bool contains(const T&, AvlNode<T>*) const;
     void makeEmpty(AvlNode<T>*&);
     T search(T,AvlNode<T>*);
+    void print(AvlNode<T>*);
+    int count(AvlNode<T>*);
     void insert(const T&, AvlNode<T>*&);
     void rotateWithLeftChild(AvlNode<T>*&);
     void rotateWithRightChild(AvlNode<T>*&);
@@ -39,11 +45,18 @@ template <class T>
 AvlTree<T>::AvlTree()
 {
     root = nullptr;
+    size = 0;
 }
 
 template <class T>
 AvlTree<T>::~AvlTree() {
     makeEmpty();
+}
+
+template <class T>
+int AvlTree<T>::getSize()
+{
+    return size;
 }
 
 template <class T>
@@ -84,6 +97,16 @@ void AvlTree<T>::insert(const T& x) {
 template <class T>
 T AvlTree<T>::search(T value) {
     return search(value,root);
+}
+
+template <class T>
+void AvlTree<T>::print() {
+    return print(root);
+}
+
+template <class T>
+int AvlTree<T>::count() {
+    return count(root);
 }
 
 template <class T>
@@ -155,9 +178,33 @@ T AvlTree<T>::search(T value, AvlNode<T>* nodePtr) {
 }
 
 template <class T>
+void AvlTree<T>::print(AvlNode<T>* nodePtr) {
+    if(nodePtr) {
+        print(nodePtr->left);
+        print(nodePtr->right);
+        cout << nodePtr->element.getWordText() << endl;
+    }
+    return;
+}
+
+template <class T>
+int AvlTree<T>::count(AvlNode<T>* nodePtr) {
+    int result = 0;
+    if(nodePtr)
+    {
+        result += count(nodePtr->left);
+        result += count(nodePtr->right);
+        result += 1;
+    }
+    return result;
+}
+
+template <class T>
 void AvlTree<T>::insert(const T& x, AvlNode<T>*& t) {
-    if(t == nullptr)
+    if(t == nullptr) {
         t = new AvlNode<T>(x,nullptr,nullptr);
+        size++;
+    }
     else if(x < t->element) {
         insert(x,t->left);
         if(height(t->left) - height(t->right) == 2) {

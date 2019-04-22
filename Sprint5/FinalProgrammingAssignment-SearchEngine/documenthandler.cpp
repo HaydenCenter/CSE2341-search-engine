@@ -2,13 +2,14 @@
 
 DocumentHandler::DocumentHandler()
 {
-    ReadInStopWords();
+    getStopwords();
     numWordsInIndex = 0;
     numDocumentsParsed = 0;
 }
 
 //Function to read in stop words and save them to a set
-void DocumentHandler::ReadInStopWords() {
+void DocumentHandler::getStopwords()
+{
     ifstream inFile;
     inFile.open("../stopwords.txt");
     if(!inFile.is_open())
@@ -22,17 +23,18 @@ void DocumentHandler::ReadInStopWords() {
 }
 
 //Function to handle a folder of files and save individual file names in a vector
-void DocumentHandler::CreateFilesVector(char* c) {
+void DocumentHandler::getFiles(char* c)
+{
     string extn = ".json";
     DIR *dir;
     struct dirent *ent;
 
     if ((dir = opendir(c)) != NULL) {
         while ((ent = readdir(dir)) != NULL) {
-            int len = strlen(ent->d_name);
+            unsigned int len = strlen(ent->d_name);
             if (ent->d_type == DT_REG &&
-                len > extn.length() &&
-                strcmp(ent->d_name + len - extn.length(), extn.c_str()) == 0)
+                    len > extn.length() &&
+                    strcmp(ent->d_name + len - extn.length(), extn.c_str()) == 0)
                 files.push_back(ent->d_name);
         }
         closedir(dir);
@@ -43,15 +45,16 @@ void DocumentHandler::CreateFilesVector(char* c) {
 }
 
 //Function to parse all documents and save data into a map
-void DocumentHandler::Parse(IndexInterface<Word>*& theIndex)
+void DocumentHandler::parse(IndexInterface<Word>*& theIndex)
 {
     //Used to parse a small random sample
     srand(time(NULL));
-    int x = rand() % 68390;
+    int x = 0;
+    //int x = rand() % 68390 - 100;
 
     //Full Data Set:
-    for(int i = 0; i < files.size(); i++)
-    //Random Sample Set:
+    for(unsigned int i = 0; i < files.size(); i++)
+    //Sample Set:
     //for(int i = x; i < x + 100; i++)
     {
         json j;
@@ -71,19 +74,15 @@ void DocumentHandler::Parse(IndexInterface<Word>*& theIndex)
         if(str == "")
             str = j["html"];
 
-        //Stems word
+        //Stems word and stores in wordMap
         istringstream iss(str);
         while(!iss.eof())
         {
             string word;
             iss >> word;
-            //cout << word << " -> "; //Remove after done debugging
             Porter2Stemmer::trim(word);
-            //cout << word << " -> "; //Remove after done debugging
             Porter2Stemmer::stem(word);
-            //cout << word << endl;   //Remove after done debugging
 
-            //Implement insertion to index here
             if(stopwords.find(word) == stopwords.end() && word != "")
             {
                 if(wordMap.find(word) == wordMap.end())
@@ -99,29 +98,30 @@ void DocumentHandler::Parse(IndexInterface<Word>*& theIndex)
                 wordMap.find(word)->second.find(id)->second++;
             }
         }
+        //Tracks progress
+        cout << i << endl;
+    }
+    cout << "------" << endl;
 
-        cout << endl << files[i] << endl << id << endl << endl;
+    //Stores in index
+    for(auto i = wordMap.begin(); i != wordMap.end(); i++ ) {
+        Word w(i->first, i->second);
+        theIndex->insert(w);
+        numWordsInIndex++;
     }
-    for(auto outer = wordMap.begin(); outer != wordMap.end(); outer++)
-    {
-        cout << outer->first << " = ";
-        for(auto inner = outer->second.begin(); inner != outer->second.end(); inner++)
-        {
-            cout << inner->first;
-            if(inner != --outer->second.end())
-                cout << ", ";
-        }
-        cout << endl;
-    }
-    SavePersistantIndex();
-    LoadIntoIndexAfterParsing(theIndex);
+    saveIndex();
 }
 
 //Function to save a copy of the persistant index to disk after parsing
-void DocumentHandler::SavePersistantIndex()
+void DocumentHandler::saveIndex()
 {
     ofstream outFile;
     outFile.open("savedIndex");
+    if(!outFile.is_open())
+        throw exception();
+
+    outFile << numDocumentsParsed << endl;
+    outFile << numWordsInIndex << endl;
     for(auto outer = wordMap.begin(); outer != wordMap.end(); outer++)
     {
         outFile << outer->first << " ";
@@ -134,23 +134,18 @@ void DocumentHandler::SavePersistantIndex()
     outFile.close();
 }
 
-//Function to load data from wordmap to the IndexInterface only after parsing
-void DocumentHandler::LoadIntoIndexAfterParsing(IndexInterface<Word>*& theIndex) {
-    for(auto i = wordMap.begin(); i != wordMap.end(); i++ ) {
-        Word w(i->first, i->second);
-        theIndex->insert(w);
-        numWordsInIndex++;
-    }
-}
-
 //Function to load data from saved persistant index to the IndexInterface
-void DocumentHandler::LoadIntoIndexFromDisk(IndexInterface<Word>*& theIndex) {
+void DocumentHandler::loadIndex(IndexInterface<Word>*& theIndex)
+{
     ifstream inFile;
-    inFile.open("SavedIndex");
+    inFile.open("savedIndex");
     if(!inFile.is_open())
         throw exception();
 
+    inFile >> numDocumentsParsed;
+    inFile >> numWordsInIndex;
     string buffer;
+    getline(inFile,buffer);
     getline(inFile,buffer);
     while(!inFile.eof())
     {
@@ -173,9 +168,10 @@ void DocumentHandler::LoadIntoIndexFromDisk(IndexInterface<Word>*& theIndex) {
 }
 
 //Function to print out information required for Monday's demo
-void DocumentHandler::PrintDemoInfo(IndexInterface<Word>*& theIndex, char* word) {
+void DocumentHandler::PrintDemoInfo(IndexInterface<Word>*& theIndex, char* word)
+{
     cout << "Number of documents parsed: " << numDocumentsParsed << endl;
-    cout << "Number of unique words in the index :" << numWordsInIndex << endl;
+    cout << "Number of unique words in the index: " << theIndex->getSize() << endl;
 
     string wordToFind(word);
     Word w(wordToFind);

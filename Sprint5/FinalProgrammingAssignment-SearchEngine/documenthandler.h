@@ -21,12 +21,11 @@ class DocumentHandler
 {
 public:
     DocumentHandler();
-    void ReadInStopWords();
-    void CreateFilesVector(char*);
-    void Parse(IndexInterface<Word>*&);
-    void SavePersistantIndex();
-    void LoadIntoIndexAfterParsing(IndexInterface<Word>*&);
-    void LoadIntoIndexFromDisk(IndexInterface<Word>*&);
+    void getStopwords();
+    void getFiles(char*);
+    void parse(IndexInterface<Word>*&);
+    void saveIndex();
+    void loadIndex(IndexInterface<Word>*&);
     void PrintDemoInfo(IndexInterface<Word>*&,char*);
 private:
     map<string,map<int,int>> wordMap;
