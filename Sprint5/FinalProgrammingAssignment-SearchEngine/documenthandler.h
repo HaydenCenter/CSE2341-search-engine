@@ -28,7 +28,6 @@ public:
     void loadIndex(IndexInterface<Word>*&);
     void PrintDemoInfo(IndexInterface<Word>*&,char*);
 private:
-    map<string,map<int,int>> wordMap;
     vector<string> files;
     set<string> stopwords;
     int numDocumentsParsed;

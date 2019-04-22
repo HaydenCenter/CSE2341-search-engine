@@ -2,7 +2,7 @@
 
 DocumentHandler::DocumentHandler()
 {
-    //getStopwords();
+    getStopwords();
     stopwords.insert("A");
     numWordsInIndex = 0;
     numDocumentsParsed = 0;
@@ -52,14 +52,16 @@ void DocumentHandler::parse(IndexInterface<Word>*& theIndex)
 {
     //Used to parse a small random sample
     srand(time(NULL));
-    int x = 0;
-    //int x = rand() % 68390 - 100;
+    //int x = 0;
+    int x = rand() % 68390 - 100;
 
     //Full Data Set:
-    //for(unsigned int i = 0; i < files.size(); i++)
+    for(unsigned int i = 0; i < files.size(); i++)
     //Sample Set:
-    for(int i = x; i < x + 100; i++)
+    //for(int i = x; i < x + 100; i++)
     {
+        if(i % 100 == 0)
+            cout << i << endl;
         json j;
         ifstream inFile;
         inFile.open("../scotus/" + files[i]);
@@ -72,6 +74,7 @@ void DocumentHandler::parse(IndexInterface<Word>*& theIndex)
 
         //Stores document ID to emplace into map
         int id = j["id"];
+        map<string,int> freqMap;
 
         //Parses file as plain text or html if plain text is empty
         string str = j["plain_text"];
@@ -96,35 +99,22 @@ void DocumentHandler::parse(IndexInterface<Word>*& theIndex)
             else
                 word = stemMap.find(word)->second;
 
-            //if(stopwords.find(word) == stopwords.end() && word != "")
-            //{
-                Word* wordPtr = theIndex->search(word);
-                if(wordPtr == nullptr)
+            if(stopwords.find(word) == stopwords.end() && word != "")
+            {
+                auto iter = freqMap.emplace(word,1);
+                if(!(iter.second))
                 {
-                    map<int,int> temp;
-                    Word w(word,temp);
-                    wordPtr = theIndex->insert(w);
+                    iter.first->second++;
                 }
-                map<int,int>* freqMap = &wordPtr->getMap();
-                //map<int,int>* innerMap = &(wordMap.find(word)->second);
-                if(freqMap->find(id) == freqMap->end())
-                {
-                    freqMap->emplace(id,0);
-                }
-                theIndex->search(word)->getMap().find(id)->second++;
-                //wordMap.find(word)->second.find(id)->second++;
-            //}
+            }
         }
-        //Tracks progress
-        cout << i << endl;
-    }
-    cout << "------" << endl;
-
-    //Stores in index
-    for(auto i = wordMap.begin(); i != wordMap.end(); i++ ) {
-        Word w(i->first, i->second);
-        theIndex->insert(w);
-        numWordsInIndex++;
+        for(map<string,int>::iterator iter = freqMap.end(); iter != freqMap.end(); iter++)
+        {
+            map<int,int> tempMap;
+            Word w(iter->first,tempMap);
+            Word* wordPtr = theIndex->insert(w);
+            wordPtr->getMap().emplace(id,iter->second);
+        }
     }
     saveIndex(theIndex);
 }
@@ -183,6 +173,8 @@ void DocumentHandler::PrintDemoInfo(IndexInterface<Word>*& theIndex, char* word)
     cout << "Number of unique words in the index: " << theIndex->getSize() << endl;
 
     string wordToFind(word);
+    Porter2Stemmer::trim(wordToFind);
+    Porter2Stemmer::stem(wordToFind);
     Word w(wordToFind);
     Word* searchResult = theIndex->search(w);
 
@@ -191,4 +183,3 @@ void DocumentHandler::PrintDemoInfo(IndexInterface<Word>*& theIndex, char* word)
     else
         cout << "The word " << searchResult->getWordText() << " is found in " << searchResult->getMap().size() << " documents." << endl;;
 }
-

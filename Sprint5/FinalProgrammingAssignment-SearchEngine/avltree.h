@@ -247,7 +247,8 @@ T* AvlTree<T>::insert(const T& x, AvlNode<T>*& t) {
                 doubleWithRightChild(t); //Case3
         }
     }
-    else {}
+    else
+        result = &(t->element);
     t->height = max(height(t->left), height(t->right)) + 1;
     return result;
 }
