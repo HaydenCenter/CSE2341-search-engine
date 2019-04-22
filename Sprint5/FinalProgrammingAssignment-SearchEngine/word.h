@@ -11,8 +11,8 @@ public:
     Word(string);
     Word(string,map<int,int>);
     bool operator==(const Word) const;
-    bool operator<(const Word rhs) const;
-    bool operator>(const Word rhs) const;
+    bool operator<(const Word) const;
+    bool operator>(const Word) const;
     string getWordText();
     void setWordText(string);
     void setMap(map<int,int>);
