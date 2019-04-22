@@ -14,8 +14,8 @@ Word::Word(string s, map<int,int> m) {
     frequencyMap = m;
 }
 
-bool Word::operator==(const Word wordToCompare) const {
-    return wordText == wordToCompare.wordText;
+bool Word::operator==(const Word rhs) const {
+    return wordText == rhs.wordText;
 }
 
 bool Word::operator<(const Word rhs) const {
@@ -26,7 +26,7 @@ bool Word::operator>(const Word rhs) const {
     return wordText > rhs.wordText;
 }
 
-string Word::getWordText() {
+string &Word::getWordText() {
     return wordText;
 }
 
@@ -38,6 +38,6 @@ void Word::setMap(map<int,int> mapToSet) {
     frequencyMap = mapToSet;
 }
 
-map<int,int> Word::getMap() {
+map<int, int>& Word::getMap() {
     return frequencyMap;
 }

@@ -2,7 +2,8 @@
 
 DocumentHandler::DocumentHandler()
 {
-    getStopwords();
+    //getStopwords();
+    stopwords.insert("A");
     numWordsInIndex = 0;
     numDocumentsParsed = 0;
 }
@@ -14,12 +15,14 @@ void DocumentHandler::getStopwords()
     inFile.open("../stopwords.txt");
     if(!inFile.is_open())
         throw exception();
-    string temp;
+
     while(!inFile.eof())
     {
+        string temp;
         inFile >> temp;
-        stopwords.emplace(temp);
+        stopwords.insert(temp);
     }
+    inFile.close();
 }
 
 //Function to handle a folder of files and save individual file names in a vector
@@ -53,9 +56,9 @@ void DocumentHandler::parse(IndexInterface<Word>*& theIndex)
     //int x = rand() % 68390 - 100;
 
     //Full Data Set:
-    for(unsigned int i = 0; i < files.size(); i++)
+    //for(unsigned int i = 0; i < files.size(); i++)
     //Sample Set:
-    //for(int i = x; i < x + 100; i++)
+    for(int i = x; i < x + 100; i++)
     {
         json j;
         ifstream inFile;
@@ -93,20 +96,24 @@ void DocumentHandler::parse(IndexInterface<Word>*& theIndex)
             else
                 word = stemMap.find(word)->second;
 
-            if(stopwords.find(word) == stopwords.end() && word != "")
-            {
-                if(wordMap.find(word) == wordMap.end())
+            //if(stopwords.find(word) == stopwords.end() && word != "")
+            //{
+                Word* wordPtr = theIndex->search(word);
+                if(wordPtr == nullptr)
                 {
                     map<int,int> temp;
-                    wordMap.emplace(word,temp);
+                    Word w(word,temp);
+                    wordPtr = theIndex->insert(w);
                 }
-                map<int,int>* innerMap = &(wordMap.find(word)->second);
-                if(innerMap->find(id) == innerMap->end())
+                map<int,int>* freqMap = &wordPtr->getMap();
+                //map<int,int>* innerMap = &(wordMap.find(word)->second);
+                if(freqMap->find(id) == freqMap->end())
                 {
-                    innerMap->emplace(id,0);
+                    freqMap->emplace(id,0);
                 }
-                wordMap.find(word)->second.find(id)->second++;
-            }
+                theIndex->search(word)->getMap().find(id)->second++;
+                //wordMap.find(word)->second.find(id)->second++;
+            //}
         }
         //Tracks progress
         cout << i << endl;
@@ -119,11 +126,11 @@ void DocumentHandler::parse(IndexInterface<Word>*& theIndex)
         theIndex->insert(w);
         numWordsInIndex++;
     }
-    saveIndex();
+    saveIndex(theIndex);
 }
 
 //Function to save a copy of the persistant index to disk after parsing
-void DocumentHandler::saveIndex()
+void DocumentHandler::saveIndex(IndexInterface<Word>*& theIndex)
 {
     ofstream outFile;
     outFile.open("savedIndex");
@@ -131,16 +138,8 @@ void DocumentHandler::saveIndex()
         throw exception();
 
     outFile << numDocumentsParsed << endl;
-    outFile << numWordsInIndex << endl;
-    for(auto outer = wordMap.begin(); outer != wordMap.end(); outer++)
-    {
-        outFile << outer->first << " ";
-        for(auto inner = outer->second.begin(); inner != outer->second.end(); inner++)
-        {
-            outFile << inner->first << " " << inner->second << " ";
-        }
-        outFile << endl;
-    }
+    outFile << theIndex->getSize() << endl;
+    theIndex->output(outFile);
     outFile.close();
 }
 
@@ -185,8 +184,11 @@ void DocumentHandler::PrintDemoInfo(IndexInterface<Word>*& theIndex, char* word)
 
     string wordToFind(word);
     Word w(wordToFind);
-    Word searchResult = theIndex->search(w);
+    Word* searchResult = theIndex->search(w);
 
-    cout << "The word " << searchResult.getWordText() << " is found in " << searchResult.getMap().size() << " documents." << endl;;
+    if(searchResult == nullptr)
+        cout << "The word " << wordToFind << " is not found within the index" << endl;
+    else
+        cout << "The word " << searchResult->getWordText() << " is found in " << searchResult->getMap().size() << " documents." << endl;;
 }
 

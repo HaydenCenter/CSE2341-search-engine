@@ -13,10 +13,10 @@ public:
     bool operator==(const Word) const;
     bool operator<(const Word) const;
     bool operator>(const Word) const;
-    string getWordText();
+    string& getWordText();
     void setWordText(string);
     void setMap(map<int,int>);
-    map<int,int> getMap();
+    map<int,int>& getMap();
 private:
     string wordText;
     map<int,int> frequencyMap;

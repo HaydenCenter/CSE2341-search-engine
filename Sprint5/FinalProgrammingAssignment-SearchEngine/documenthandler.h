@@ -24,7 +24,7 @@ public:
     void getStopwords();
     void getFiles(char*);
     void parse(IndexInterface<Word>*&);
-    void saveIndex();
+    void saveIndex(IndexInterface<Word>*&);
     void loadIndex(IndexInterface<Word>*&);
     void PrintDemoInfo(IndexInterface<Word>*&,char*);
 private:

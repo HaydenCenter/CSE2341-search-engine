@@ -18,9 +18,10 @@ public:
     bool contains(const T&) const;
     bool isEmpty() const;
     void makeEmpty();
-    void insert(const T&);
-    T search(T);
+    T* insert(const T&);
+    T* search(T);
     void print();
+    void output(ofstream&);
     int count();
 private:
     AvlNode<T>* root;
@@ -31,10 +32,11 @@ private:
     AvlNode<T>* findMax(AvlNode<T>*);
     bool contains(const T&, AvlNode<T>*) const;
     void makeEmpty(AvlNode<T>*&);
-    T search(T,AvlNode<T>*);
+    T* search(T,AvlNode<T>*);
     void print(AvlNode<T>*);
+    void output(AvlNode<T>*,ofstream&);
     int count(AvlNode<T>*);
-    void insert(const T&, AvlNode<T>*&);
+    T* insert(const T&, AvlNode<T>*&);
     void rotateWithLeftChild(AvlNode<T>*&);
     void rotateWithRightChild(AvlNode<T>*&);
     void doubleWithLeftChild(AvlNode<T>*&);
@@ -90,18 +92,24 @@ void AvlTree<T>::makeEmpty() {
 }
 
 template <class T>
-void AvlTree<T>::insert(const T& x) {
-    insert(x,root);
+T* AvlTree<T>::insert(const T& x) {
+    return insert(x,root);
 }
 
 template <class T>
-T AvlTree<T>::search(T value) {
+T* AvlTree<T>::search(T value) {
     return search(value,root);
 }
 
 template <class T>
 void AvlTree<T>::print() {
     return print(root);
+}
+
+template <class T>
+void AvlTree<T>::output(ofstream& outFile)
+{
+    return output(root,outFile);
 }
 
 template <class T>
@@ -160,29 +168,43 @@ void AvlTree<T>::makeEmpty(AvlNode<T>*& nodePtr) {
 }
 
 template <class T>
-T AvlTree<T>::search(T value, AvlNode<T>* nodePtr) {
+T* AvlTree<T>::search(T value, AvlNode<T>* nodePtr) {
     if(isEmpty())
-        throw underflow_error("No values to search");
-    if(value > nodePtr->element) {
-        if(nodePtr->right == nullptr)
-            throw invalid_argument("Value is not present in the AvlTree");
+        return nullptr;
+    else if(nodePtr == nullptr)
+        return nullptr;
+    else if(value == nodePtr->element)
+        return &nodePtr->element;
+    else if(value > nodePtr->element)
         return search(value,nodePtr->right);
-    }
-    else if(value < nodePtr->element) {
-        if(nodePtr->left == nullptr)
-            throw invalid_argument("Value is not present in the AvlTree");
+    else if(value < nodePtr->element)
         return search(value,nodePtr->left);
-    }
     else
-        return nodePtr->element;
+        return nullptr;
 }
 
 template <class T>
 void AvlTree<T>::print(AvlNode<T>* nodePtr) {
     if(nodePtr) {
         print(nodePtr->left);
+        cout << nodePtr->element.getWordText() << " ";
+        for(auto iter = nodePtr->element.getMap().begin(); iter != nodePtr->element.getMap().end(); iter++)
+            cout << iter->first << " " << iter->second << " ";
+        cout << endl;
         print(nodePtr->right);
-        cout << nodePtr->element.getWordText() << endl;
+    }
+    return;
+}
+
+template <class T>
+void AvlTree<T>::output(AvlNode<T>* nodePtr, ofstream& outFile) {
+    if(nodePtr) {
+        output(nodePtr->left,outFile);
+        outFile << nodePtr->element.getWordText() << " ";
+        for(auto iter = nodePtr->element.getMap().begin(); iter != nodePtr->element.getMap().end(); iter++)
+            outFile << iter->first << " " << iter->second << " ";
+        outFile << endl;
+        output(nodePtr->right,outFile);
     }
     return;
 }
@@ -200,13 +222,15 @@ int AvlTree<T>::count(AvlNode<T>* nodePtr) {
 }
 
 template <class T>
-void AvlTree<T>::insert(const T& x, AvlNode<T>*& t) {
+T* AvlTree<T>::insert(const T& x, AvlNode<T>*& t) {
+    T* result = nullptr;
     if(t == nullptr) {
         t = new AvlNode<T>(x,nullptr,nullptr);
         size++;
+        result = &(t->element);
     }
     else if(x < t->element) {
-        insert(x,t->left);
+        result = insert(x,t->left);
         if(height(t->left) - height(t->right) == 2) {
             if(x < t->left->element)
                 rotateWithLeftChild(t); //Case1
@@ -215,7 +239,7 @@ void AvlTree<T>::insert(const T& x, AvlNode<T>*& t) {
         }
     }
     else if(t->element < x) {
-        insert(x,t->right);
+        result = insert(x,t->right);
         if(height(t->right) - height(t->left) == 2) {
             if(t->right->element < x)
                 rotateWithRightChild(t); //Case4
@@ -225,6 +249,7 @@ void AvlTree<T>::insert(const T& x, AvlNode<T>*& t) {
     }
     else {}
     t->height = max(height(t->left), height(t->right)) + 1;
+    return result;
 }
 
 template <class T>
