@@ -65,6 +65,7 @@ void DocumentHandler::parse(IndexInterface<Word>*& theIndex)
         numDocumentsParsed++;
         //Stores entire file into json object
         inFile >> j;
+        inFile.close();
 
         //Stores document ID to emplace into map
         int id = j["id"];
@@ -76,12 +77,21 @@ void DocumentHandler::parse(IndexInterface<Word>*& theIndex)
 
         //Stems word and stores in wordMap
         istringstream iss(str);
+        map<string,string> stemMap;
         while(!iss.eof())
         {
             string word;
             iss >> word;
-            Porter2Stemmer::trim(word);
-            Porter2Stemmer::stem(word);
+
+            if(stemMap.find(word) == stemMap.end())
+            {
+                string origWord = word;
+                Porter2Stemmer::trim(word);
+                Porter2Stemmer::stem(word);
+                stemMap.emplace(origWord,word);
+            }
+            else
+                word = stemMap.find(word)->second;
 
             if(stopwords.find(word) == stopwords.end() && word != "")
             {
