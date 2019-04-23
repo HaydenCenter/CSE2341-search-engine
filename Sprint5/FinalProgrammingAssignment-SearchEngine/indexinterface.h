@@ -6,7 +6,7 @@ class IndexInterface
 {
 public:
     IndexInterface() {}
-    virtual ~IndexInterface() {};
+    virtual ~IndexInterface() {}
     virtual int getSize() = 0;
     virtual void insert(const V&) = 0;
     virtual void makeEmpty() = 0;
