@@ -15,8 +15,9 @@ int main(int argc, char* argv[])
     auto start = high_resolution_clock::now();
 
     cout << argc << endl;
-    for(int i = 1; i < argc; i++)
+    for(int i = 0; i < argc; i++)
         cout << argv[i] << endl;
+    cout << endl;
 
     IndexInterface<Word>* theIndex = new AvlTree<Word>;
     DocumentHandler dh;
@@ -24,10 +25,13 @@ int main(int argc, char* argv[])
 
     dh.parse(theIndex);
     dh.loadIndex(theIndex);
+    theIndex->print();
     dh.PrintDemoInfo(theIndex,argv[2]);
+
+    dh.saveIndex(theIndex);
+    delete theIndex;
+
     auto end = high_resolution_clock::now();
     auto duration = duration_cast<microseconds>(end - start);
     cout << "Runtime: " << duration.count()/1000000.0 << " seconds" << endl;
-
-    delete theIndex;
 }

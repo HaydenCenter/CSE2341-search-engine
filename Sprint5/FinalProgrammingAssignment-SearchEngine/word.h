@@ -14,12 +14,12 @@ public:
     bool operator<(const Word) const;
     bool operator>(const Word) const;
     string& getWordText();
+    map<int,int>& getMap();
     void setWordText(string);
     void setMap(map<int,int>);
-    map<int,int>& getMap();
 private:
     string wordText;
-    map<int,int> frequencyMap;
+    map<int,int> freqMap;
 };
 
 #endif // WORD_H

@@ -1,11 +1,10 @@
 #include "documenthandler.h"
 
+using namespace std;
+
 DocumentHandler::DocumentHandler()
 {
     getStopwords();
-    stopwords.insert("A");
-    numWordsInIndex = 0;
-    numDocumentsParsed = 0;
 }
 
 //Function to read in stop words and save them to a set
@@ -53,7 +52,8 @@ void DocumentHandler::parse(IndexInterface<Word>*& theIndex)
     //Used to parse a small random sample
     srand(time(NULL));
     //int x = 0;
-    int x = rand() % 68390 - 100;
+    //int x = rand() % 68390 - 100;
+    int numDocumentsParsed = 0;
 
     //Full Data Set:
     for(unsigned int i = 0; i < files.size(); i++)
@@ -94,54 +94,58 @@ void DocumentHandler::parse(IndexInterface<Word>*& theIndex)
                 string origWord = word;
                 Porter2Stemmer::trim(word);
                 Porter2Stemmer::stem(word);
-                stemMap.emplace(origWord,word);
+                stemMap.emplace(make_pair(origWord,word));
             }
             else
                 word = stemMap.find(word)->second;
 
             if(stopwords.find(word) == stopwords.end() && word != "")
             {
-                auto iter = freqMap.emplace(word,1);
+                auto iter = freqMap.emplace(make_pair(word,1));
                 if(!(iter.second))
                 {
                     iter.first->second++;
                 }
             }
         }
-        for(map<string,int>::iterator iter = freqMap.end(); iter != freqMap.end(); iter++)
+        for(map<string,int>::iterator iter = freqMap.begin(); iter != freqMap.end(); iter++)
         {
             map<int,int> tempMap;
             Word w(iter->first,tempMap);
             Word* wordPtr = theIndex->insert(w);
-            wordPtr->getMap().emplace(id,iter->second);
+            wordPtr->getMap().emplace(make_pair(id,iter->second));
         }
     }
-    saveIndex(theIndex);
+    cout << endl;
+    theIndex->getNumDocsParsed() += numDocumentsParsed;
 }
 
 //Function to save a copy of the persistant index to disk after parsing
 void DocumentHandler::saveIndex(IndexInterface<Word>*& theIndex)
 {
+    cout << "Saving Index...";
     ofstream outFile;
     outFile.open("savedIndex");
     if(!outFile.is_open())
         throw exception();
 
-    outFile << numDocumentsParsed << endl;
+    outFile << theIndex->getNumDocsParsed() << endl;
     outFile << theIndex->getSize() << endl;
     theIndex->output(outFile);
     outFile.close();
+    cout << "Index Saved" << endl;
 }
 
 //Function to load data from saved persistant index to the IndexInterface
 void DocumentHandler::loadIndex(IndexInterface<Word>*& theIndex)
 {
+    theIndex->makeEmpty();
     ifstream inFile;
     inFile.open("savedIndex");
     if(!inFile.is_open())
         throw exception();
-
-    inFile >> numDocumentsParsed;
+    int numWordsInIndex;
+    inFile >> theIndex->getNumDocsParsed();
     inFile >> numWordsInIndex;
     string buffer;
     getline(inFile,buffer);
@@ -158,18 +162,22 @@ void DocumentHandler::loadIndex(IndexInterface<Word>*& theIndex)
             int freq;
             iss >> page;
             iss >> freq;
-            tempMap.emplace(page,freq);
+
+            tempMap.emplace(make_pair(page,freq));
         }
         Word w(temp,tempMap);
         theIndex->insert(w);
         getline(inFile,buffer);
     }
+    inFile.close();
+    if(numWordsInIndex != theIndex->count())
+        throw exception();
 }
 
 //Function to print out information required for Monday's demo
 void DocumentHandler::PrintDemoInfo(IndexInterface<Word>*& theIndex, char* word)
 {
-    cout << "Number of documents parsed: " << numDocumentsParsed << endl;
+    cout << "Number of documents parsed: " << theIndex->getNumDocsParsed() << endl;
     cout << "Number of unique words in the index: " << theIndex->getSize() << endl;
 
     string wordToFind(word);
@@ -179,7 +187,7 @@ void DocumentHandler::PrintDemoInfo(IndexInterface<Word>*& theIndex, char* word)
     Word* searchResult = theIndex->search(w);
 
     if(searchResult == nullptr)
-        cout << "The word " << wordToFind << " is not found within the index" << endl;
+        cout << word << " is not found within the index" << endl;
     else
-        cout << "The word " << searchResult->getWordText() << " is found in " << searchResult->getMap().size() << " documents." << endl;;
+        cout << word << " is found in " << searchResult->getMap().size() << " documents." << endl;;
 }

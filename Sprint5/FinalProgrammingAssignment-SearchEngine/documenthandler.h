@@ -30,8 +30,6 @@ public:
 private:
     vector<string> files;
     set<string> stopwords;
-    int numDocumentsParsed;
-    int numWordsInIndex;
 };
 
 #endif // DOCUMENTHANDLER_H
