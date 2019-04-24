@@ -45,7 +45,7 @@ void DocumentHandler::getFiles(char* c)
 }
 
 //Function to parse all documents and save data into a map
-void DocumentHandler::parse(IndexInterface<Word>*& theIndex, char* argv[])
+void DocumentHandler::parse(IndexInterface*& theIndex, char* argv[])
 {
     //Used to parse a small random sample
     srand(time(NULL));
@@ -145,7 +145,7 @@ void DocumentHandler::saveIndex()
 }
 
 //Function to load data from saved persistant index to the IndexInterface
-void DocumentHandler::loadIndex(IndexInterface<Word>*& theIndex)
+void DocumentHandler::loadIndex(IndexInterface*& theIndex)
 {
     ifstream inFile;
     inFile.open("savedIndex");
@@ -178,15 +178,15 @@ void DocumentHandler::loadIndex(IndexInterface<Word>*& theIndex)
 }
 
 //Function to print out information required for Monday's demo
-void DocumentHandler::PrintDemoInfo(IndexInterface<Word>*& theIndex, char* word)
+void DocumentHandler::PrintDemoInfo(IndexInterface*& theIndex, char* word)
 {
     cout << "Number of documents parsed: " << numDocumentsParsed << endl;
     cout << "Number of unique words in the index: " << theIndex->getSize() << endl;
 
     string wordToFind(word);
     Word w(wordToFind);
-    Word searchResult = theIndex->search(w);
+    Word* searchResult = theIndex->search(w);
 
-    cout << "The word " << searchResult.getWordText() << " is found in " << searchResult.getMap().size() << " documents." << endl;;
+    cout << "The word " << searchResult->getWordText() << " is found in " << searchResult->getMap().size() << " documents." << endl;;
 }
 
