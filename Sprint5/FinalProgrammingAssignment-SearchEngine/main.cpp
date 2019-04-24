@@ -23,8 +23,7 @@ int main(int argc, char* argv[])
     DocumentHandler dh;
     dh.getFiles(argv[1]);
 
-    dh.parse(theIndex);
-    theIndex->print();
+    dh.parse(theIndex,argv);
     dh.PrintDemoInfo(theIndex,argv[2]);
 
     string word(argv[2]);

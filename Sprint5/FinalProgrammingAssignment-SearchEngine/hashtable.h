@@ -45,10 +45,10 @@ int& Hashtable<K,V>::getSize() {
 
 template <class K, class V>
 V* Hashtable<K,V>::insert(const K& key, const V& value) {
-    pair<K,V> newNode = make_pair(key,value);
+    pair<K,V>* newNode = new pair<K,V>(key,value);
     int hashvalue = stringhash(key)%tableSize;
-    table[hashvalue].push_back(newNode);
-    return &(newNode.second);
+    table[hashvalue].push_back(*newNode);
+    return &(newNode->second);
 }
 
 template <class K, class V>
@@ -70,7 +70,7 @@ bool Hashtable<K,V>::isEmpty() const {
 template <class K, class V>
 bool Hashtable<K,V>::contains(K key, V value) {
     int hashvalue = stringhash(key)%tableSize;
-    for(int i = 0; i < table[hashvalue].size(); i++) {
+    for(unsigned int i = 0; i < table[hashvalue].size(); i++) {
         if(table[hashvalue].at(i).second == value)
             return true;
     }
@@ -80,17 +80,18 @@ bool Hashtable<K,V>::contains(K key, V value) {
 template <class K, class V>
 V* Hashtable<K,V>::search(K key, V value) {
     int hashvalue = stringhash(key)%tableSize;
-    for(int i = 0; i < table[hashvalue].size(); i++) {
+    for(unsigned int i = 0; i < table[hashvalue].size(); i++) {
         if(table[hashvalue].at(i).second == value) {
             return &(table[hashvalue].at(i).second);
         }
     }
+    return nullptr;
 }
 
 template <class K, class V>
 void Hashtable<K,V>::print() {
     for(int i = 0; i < tableSize; i++) {
-        for(int j = 0; j < table[i].size(); j++) {
+        for(unsigned int j = 0; j < table[i].size(); j++) {
             cout << table[i].at(j).second.getWordText() << " ";
             for(auto iter = table[i].at(j).second.getMap().begin(); iter != table[i].at(j).second.getMap().end(); iter++) {
                 cout << iter->first << " " << iter->second << " ";
@@ -102,7 +103,7 @@ void Hashtable<K,V>::print() {
 template <class K, class V>
 void Hashtable<K,V>::output(ofstream& outFS) {
     for(int i = 0; i < tableSize; i++) {
-        for(int j = 0; j < table[i].size(); j++) {
+        for(unsigned int j = 0; j < table[i].size(); j++) {
             outFS << table[i].at(j).second.getWordText() << " ";
             for(auto iter = table[i].at(j).second.getMap().begin(); iter != table[i].at(j).second.getMap().end(); iter++) {
                 outFS << iter->first << " " << iter->second << " ";

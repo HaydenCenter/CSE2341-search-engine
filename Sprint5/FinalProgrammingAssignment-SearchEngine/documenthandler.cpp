@@ -52,13 +52,13 @@ void DocumentHandler::parse(IndexInterface*& theIndex, char* argv[])
     //Used to parse a small random sample
     srand(time(NULL));
     //int x = 0;
-    int x = rand() % 68390 - 100;
+    //int x = rand() % 68390 - 100;
     int numDocumentsParsed = 0;
 
     //Full Data Set:
-    //for(unsigned int i = 0; i < files.size(); i++)
+    for(unsigned int i = 0; i < files.size(); i++)
     //Sample Set:
-    for(int i = x; i < x + 100; i++)
+    //for(int i = x; i < x + 100; i++)
     {
         if(i % 100 == 0)
             cout << i << endl;
@@ -74,7 +74,7 @@ void DocumentHandler::parse(IndexInterface*& theIndex, char* argv[])
 
         //Stores document ID to emplace into map
         string id = files[i];
-        map<string,int> freqMap;
+        map<string,double> freqMap;
 
         //Parses file as plain text or html if plain text is empty
         string str = j["plain_text"];
@@ -84,6 +84,7 @@ void DocumentHandler::parse(IndexInterface*& theIndex, char* argv[])
         //Stems word and stores in wordMap
         istringstream iss(str);
         map<string,string> stemMap;
+        double numWords = 0.0;
         while(!iss.eof())
         {
             string word;
@@ -101,19 +102,20 @@ void DocumentHandler::parse(IndexInterface*& theIndex, char* argv[])
 
             if(stopwords.find(word) == stopwords.end() && word != "")
             {
-                auto iter = freqMap.emplace(make_pair(word,1));
+                auto iter = freqMap.emplace(make_pair(word,1.0));
                 if(!(iter.second))
                 {
                     iter.first->second++;
                 }
+                numWords++;
             }
         }
-        for(map<string,int>::iterator iter = freqMap.begin(); iter != freqMap.end(); iter++)
+        for(map<string,double>::iterator iter = freqMap.begin(); iter != freqMap.end(); iter++)
         {
-            map<string,int> tempMap;
+            map<string,double> tempMap;
             Word w(iter->first,tempMap);
             Word* wordPtr = theIndex->insert(w);
-            wordPtr->getMap().emplace(make_pair(id,iter->second));
+            wordPtr->getMap().emplace(make_pair(id,(iter->second/numWords) * 10000));
         }
     }
     cout << endl;
@@ -121,7 +123,7 @@ void DocumentHandler::parse(IndexInterface*& theIndex, char* argv[])
 }
 
 //Function to save a copy of the persistant index to disk after parsing
-void DocumentHandler::saveIndex(IndexInterface<Word>*& theIndex)
+void DocumentHandler::saveIndex(IndexInterface*& theIndex)
 {
     cout << "Saving Index...";
     ofstream outFile;
@@ -155,12 +157,11 @@ void DocumentHandler::loadIndex(IndexInterface*& theIndex)
         istringstream iss(buffer);
         string temp;
         iss >> temp;
-        map<string,int> tempMap;
-        while(!iss.eof())
+        map<string,double> tempMap;
+        string page;
+        while(iss >> page)
         {
-            string page;
-            int freq;
-            iss >> page;
+            double freq;
             iss >> freq;
 
             tempMap.emplace(make_pair(page,freq));
@@ -170,7 +171,7 @@ void DocumentHandler::loadIndex(IndexInterface*& theIndex)
         getline(inFile,buffer);
     }
     inFile.close();
-    if(numWordsInIndex != theIndex->count())
+    if(numWordsInIndex != theIndex->getSize())
         throw exception();
 }
 

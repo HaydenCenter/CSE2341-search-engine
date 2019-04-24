@@ -12,18 +12,18 @@ class Word
 public:
     Word();
     Word(string);
-    Word(string,map<string,int>);
+    Word(string,map<string,double>);
     bool operator==(const Word) const;
     bool operator<(const Word) const;
     bool operator>(const Word) const;
     string& getWordText();
-    map<string, int> &getMap();
+    map<string,double> &getMap();
     void setWordText(string);
-    void setMap(map<string,int>);
+    void setMap(map<string,double>);
     vector<pair<double,string>> relevantDocuments(int);
 private:
     string wordText;
-    map<string,int> freqMap;
+    map<string,double> freqMap;
 };
 
 #endif // WORD_H

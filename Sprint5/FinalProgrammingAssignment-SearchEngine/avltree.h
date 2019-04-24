@@ -266,7 +266,7 @@ void AvlTree<T>::print(AvlNode<T>* nodePtr)
         print(nodePtr->left);
         cout << nodePtr->element.getWordText() << " ";
         for(auto iter = nodePtr->element.getMap().begin(); iter != nodePtr->element.getMap().end(); iter++)
-            cout << iter->first << " " << iter->second << " ";
+            cout << fixed << iter->first << " " << iter->second << " ";
         cout << endl;
         print(nodePtr->right);
     }
@@ -280,7 +280,7 @@ void AvlTree<T>::output(AvlNode<T>* nodePtr, ofstream& outFile)
         output(nodePtr->left,outFile);
         outFile << nodePtr->element.getWordText() << " ";
         for(auto iter = nodePtr->element.getMap().begin(); iter != nodePtr->element.getMap().end(); iter++)
-            outFile << iter->first << " " << iter->second << " ";
+            outFile << fixed << iter->first << " " << iter->second << " ";
         outFile << endl;
         output(nodePtr->right,outFile);
     }
