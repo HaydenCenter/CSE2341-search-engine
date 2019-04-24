@@ -5,39 +5,63 @@ Word::Word()
     wordText = "";
 }
 
-Word::Word(string s) {
+Word::Word(string s)
+{
     wordText = s;
 }
 
-Word::Word(string s, map<int,int> m) {
+Word::Word(string s, map<string, int> m)
+{
     wordText = s;
-    frequencyMap = m;
+    freqMap = m;
 }
 
-bool Word::operator==(const Word wordToCompare) const {
-    return wordText == wordToCompare.wordText;
+bool Word::operator==(const Word rhs) const
+{
+    return wordText == rhs.wordText;
 }
 
-bool Word::operator<(const Word rhs) const {
+bool Word::operator<(const Word rhs) const
+{
     return wordText < rhs.wordText;
 }
 
-bool Word::operator>(const Word rhs) const {
+bool Word::operator>(const Word rhs) const
+{
     return wordText > rhs.wordText;
 }
 
-string Word::getWordText() {
+string &Word::getWordText()
+{
     return wordText;
 }
 
-void Word::setWordText(string s) {
+map<string, int>& Word::getMap()
+{
+    return freqMap;
+}
+
+void Word::setWordText(string s)
+{
     wordText = s;
 }
 
-void Word::setMap(map<int,int> mapToSet) {
-    frequencyMap = mapToSet;
+void Word::setMap(map<string,int> mapToSet)
+{
+    freqMap = mapToSet;
 }
 
-map<int,int> Word::getMap() {
-    return frequencyMap;
+vector<pair<double,string>> Word::relevantDocuments(int numDocsParsed)
+{
+
+    vector<pair<double,string>> result;
+    for(map<string,int>::iterator iter = freqMap.begin(); iter != freqMap.end(); iter++)
+    {
+        double TF = iter->second / 8832.14;
+        double IDF = log((1.0 * numDocsParsed)/freqMap.size());
+        double TFIDF = TF * IDF;
+        result.push_back(make_pair(TFIDF,iter->first));
+    }
+    sort(result.begin(),result.end());
+    return result;
 }

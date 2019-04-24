@@ -23,16 +23,13 @@ public:
     DocumentHandler();
     void getStopwords();
     void getFiles(char*);
-    void parse(IndexInterface*&, char*[]);
-    void saveIndex();
-    void loadIndex(IndexInterface*&);
-    void PrintDemoInfo(IndexInterface*&,char*);
+    void parse(IndexInterface<Word>*&);
+    void saveIndex(IndexInterface<Word>*&);
+    void loadIndex(IndexInterface<Word>*&);
+    void PrintDemoInfo(IndexInterface<Word>*&,char*);
 private:
-    map<string,map<int,int>> wordMap;
     vector<string> files;
     set<string> stopwords;
-    int numDocumentsParsed;
-    int numWordsInIndex;
 };
 
 #endif // DOCUMENTHANDLER_H

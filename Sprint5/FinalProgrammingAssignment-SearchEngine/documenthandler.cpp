@@ -1,10 +1,10 @@
 #include "documenthandler.h"
 
+using namespace std;
+
 DocumentHandler::DocumentHandler()
 {
     getStopwords();
-    numWordsInIndex = 0;
-    numDocumentsParsed = 0;
 }
 
 //Function to read in stop words and save them to a set
@@ -14,12 +14,14 @@ void DocumentHandler::getStopwords()
     inFile.open("../stopwords.txt");
     if(!inFile.is_open())
         throw exception();
-    string temp;
+
     while(!inFile.eof())
     {
+        string temp;
         inFile >> temp;
-        stopwords.emplace(temp);
+        stopwords.insert(temp);
     }
+    inFile.close();
 }
 
 //Function to handle a folder of files and save individual file names in a vector
@@ -49,14 +51,17 @@ void DocumentHandler::parse(IndexInterface*& theIndex, char* argv[])
 {
     //Used to parse a small random sample
     srand(time(NULL));
-    int x = 0;
-    //int x = rand() % 68390 - 100;
+    //int x = 0;
+    int x = rand() % 68390 - 100;
+    int numDocumentsParsed = 0;
 
     //Full Data Set:
-    for(unsigned int i = 0; i < files.size(); i++)
+    //for(unsigned int i = 0; i < files.size(); i++)
     //Sample Set:
-    //for(int i = x; i < x + 100; i++)
+    for(int i = x; i < x + 100; i++)
     {
+        if(i % 100 == 0)
+            cout << i << endl;
         json j;
         ifstream inFile;
         inFile.open(argv[1] + files[i]);
@@ -68,7 +73,8 @@ void DocumentHandler::parse(IndexInterface*& theIndex, char* argv[])
         inFile.close();
 
         //Stores document ID to emplace into map
-        int id = j["id"];
+        string id = files[i];
+        map<string,int> freqMap;
 
         //Parses file as plain text or html if plain text is empty
         string str = j["plain_text"];
@@ -88,71 +94,58 @@ void DocumentHandler::parse(IndexInterface*& theIndex, char* argv[])
                 string origWord = word;
                 Porter2Stemmer::trim(word);
                 Porter2Stemmer::stem(word);
-                stemMap.emplace(origWord,word);
+                stemMap.emplace(make_pair(origWord,word));
             }
             else
                 word = stemMap.find(word)->second;
 
             if(stopwords.find(word) == stopwords.end() && word != "")
             {
-                if(wordMap.find(word) == wordMap.end())
+                auto iter = freqMap.emplace(make_pair(word,1));
+                if(!(iter.second))
                 {
-                    map<int,int> temp;
-                    wordMap.emplace(word,temp);
+                    iter.first->second++;
                 }
-                map<int,int>* innerMap = &(wordMap.find(word)->second);
-                if(innerMap->find(id) == innerMap->end())
-                {
-                    innerMap->emplace(id,0);
-                }
-                wordMap.find(word)->second.find(id)->second++;
             }
         }
-        //Tracks progress
-        cout << i << endl;
+        for(map<string,int>::iterator iter = freqMap.begin(); iter != freqMap.end(); iter++)
+        {
+            map<string,int> tempMap;
+            Word w(iter->first,tempMap);
+            Word* wordPtr = theIndex->insert(w);
+            wordPtr->getMap().emplace(make_pair(id,iter->second));
+        }
     }
-    cout << "------" << endl;
-
-    //Stores in index
-    for(auto i = wordMap.begin(); i != wordMap.end(); i++ ) {
-        Word w(i->first, i->second);
-        theIndex->insert(w);
-        numWordsInIndex++;
-    }
-    saveIndex();
+    cout << endl;
+    theIndex->getNumDocsParsed() += numDocumentsParsed;
 }
 
 //Function to save a copy of the persistant index to disk after parsing
-void DocumentHandler::saveIndex()
+void DocumentHandler::saveIndex(IndexInterface<Word>*& theIndex)
 {
+    cout << "Saving Index...";
     ofstream outFile;
     outFile.open("savedIndex");
     if(!outFile.is_open())
         throw exception();
 
-    outFile << numDocumentsParsed << endl;
-    outFile << numWordsInIndex << endl;
-    for(auto outer = wordMap.begin(); outer != wordMap.end(); outer++)
-    {
-        outFile << outer->first << " ";
-        for(auto inner = outer->second.begin(); inner != outer->second.end(); inner++)
-        {
-            outFile << inner->first << " " << inner->second << " ";
-        }
-        outFile << endl;
-    }
+    outFile << theIndex->getNumDocsParsed() << endl;
+    outFile << theIndex->getSize() << endl;
+    theIndex->output(outFile);
     outFile.close();
+    cout << "Index Saved" << endl;
 }
 
 //Function to load data from saved persistant index to the IndexInterface
 void DocumentHandler::loadIndex(IndexInterface*& theIndex)
 {
+    theIndex->makeEmpty();
     ifstream inFile;
     inFile.open("savedIndex");
     if(!inFile.is_open())
         throw exception();
-
-    inFile >> numDocumentsParsed;
+    int numWordsInIndex;
+    inFile >> theIndex->getNumDocsParsed();
     inFile >> numWordsInIndex;
     string buffer;
     getline(inFile,buffer);
@@ -162,31 +155,39 @@ void DocumentHandler::loadIndex(IndexInterface*& theIndex)
         istringstream iss(buffer);
         string temp;
         iss >> temp;
-        map<int,int> tempMap;
+        map<string,int> tempMap;
         while(!iss.eof())
         {
-            int page;
+            string page;
             int freq;
             iss >> page;
             iss >> freq;
-            tempMap.emplace(page,freq);
+
+            tempMap.emplace(make_pair(page,freq));
         }
         Word w(temp,tempMap);
         theIndex->insert(w);
         getline(inFile,buffer);
     }
+    inFile.close();
+    if(numWordsInIndex != theIndex->count())
+        throw exception();
 }
 
 //Function to print out information required for Monday's demo
 void DocumentHandler::PrintDemoInfo(IndexInterface*& theIndex, char* word)
 {
-    cout << "Number of documents parsed: " << numDocumentsParsed << endl;
+    cout << "Number of documents parsed: " << theIndex->getNumDocsParsed() << endl;
     cout << "Number of unique words in the index: " << theIndex->getSize() << endl;
 
     string wordToFind(word);
+    Porter2Stemmer::trim(wordToFind);
+    Porter2Stemmer::stem(wordToFind);
     Word w(wordToFind);
     Word* searchResult = theIndex->search(w);
 
-    cout << "The word " << searchResult->getWordText() << " is found in " << searchResult->getMap().size() << " documents." << endl;;
+    if(searchResult == nullptr)
+        cout << word << " is not found within the index" << endl;
+    else
+        cout << word << " is found in " << searchResult->getMap().size() << " documents." << endl;
 }
-
