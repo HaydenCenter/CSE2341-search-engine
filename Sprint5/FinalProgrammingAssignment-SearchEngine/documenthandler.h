@@ -23,10 +23,10 @@ public:
     DocumentHandler();
     void getStopwords();
     void getFiles(char*);
-    void parse(IndexInterface*&,char*[]);
+    void parse(IndexInterface*&,char*);
     void saveIndex(IndexInterface*&);
     void loadIndex(IndexInterface*&);
-    void PrintDemoInfo(IndexInterface*&,char*);
+    void printStatistics(IndexInterface*&);
 private:
     vector<string> files;
     set<string> stopwords;

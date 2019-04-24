@@ -47,7 +47,7 @@ void DocumentHandler::getFiles(char* c)
 }
 
 //Function to parse all documents and save data into a map
-void DocumentHandler::parse(IndexInterface*& theIndex, char* argv[])
+void DocumentHandler::parse(IndexInterface*& theIndex, char* inputFolder)
 {
     //Used to parse a small random sample
     srand(time(NULL));
@@ -56,7 +56,7 @@ void DocumentHandler::parse(IndexInterface*& theIndex, char* argv[])
     int numDocumentsParsed = 0;
 
     //Full Data Set:
-    for(unsigned int i = 0; i < files.size(); i++)
+    for(unsigned int i = 0; i < 100/*files.size()*/; i++)
     //Sample Set:
     //for(int i = x; i < x + 100; i++)
     {
@@ -64,7 +64,7 @@ void DocumentHandler::parse(IndexInterface*& theIndex, char* argv[])
             cout << i << endl;
         json j;
         ifstream inFile;
-        inFile.open(argv[1] + files[i]);
+        inFile.open(inputFolder + files[i]);
         if(!inFile.is_open())
             throw exception();
         numDocumentsParsed++;
@@ -174,19 +174,11 @@ void DocumentHandler::loadIndex(IndexInterface*& theIndex)
 }
 
 //Function to print out information required for Monday's demo
-void DocumentHandler::PrintDemoInfo(IndexInterface*& theIndex, char* word)
+void DocumentHandler::printStatistics(IndexInterface*& theIndex)
 {
     cout << "Number of documents parsed: " << theIndex->getNumDocsParsed() << endl;
     cout << "Number of unique words in the index: " << theIndex->getSize() << endl;
+    //include average number of words per document
+    //include top 50 most frequent words
 
-    string wordToFind(word);
-    Porter2Stemmer::trim(wordToFind);
-    Porter2Stemmer::stem(wordToFind);
-    Word w(wordToFind);
-    Word* searchResult = theIndex->search(w);
-
-    if(searchResult == nullptr)
-        cout << word << " is not found within the index" << endl;
-    else
-        cout << word << " is found in " << searchResult->getMap().size() << " documents." << endl;
 }
