@@ -60,7 +60,7 @@ void DocumentHandler::parse(IndexInterface*& theIndex, char* argv[])
     //Sample Set:
     //for(int i = x; i < x + 100; i++)
     {
-        if(i % 100 == 0)
+        //if(i % 100 == 0)
             cout << i << endl;
         json j;
         ifstream inFile;
