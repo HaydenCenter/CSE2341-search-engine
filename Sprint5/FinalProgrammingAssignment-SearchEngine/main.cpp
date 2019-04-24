@@ -92,7 +92,7 @@ int main(int argc, char* argv[])
                         theIndex = new AvlTree<Word>;
                     }
                     else if(userChoice == 'h') {
-                        theIndex == new HashtableAdapt;
+                        theIndex = new HashtableAdapt;
                     }
                     cout << "Would you like to load the index from scratch (Press 's') -OR- from a persisted index (Press 'p')" << endl;
                     cin >> userChoice;
