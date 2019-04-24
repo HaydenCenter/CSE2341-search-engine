@@ -51,14 +51,14 @@ void DocumentHandler::parse(IndexInterface*& theIndex, char* argv[])
 {
     //Used to parse a small random sample
     srand(time(NULL));
-    //int x = 0;
+    int x = 0;
     //int x = rand() % 68390 - 100;
     int numDocumentsParsed = 0;
 
     //Full Data Set:
-    for(unsigned int i = 0; i < files.size(); i++)
+    //for(unsigned int i = 0; i < files.size(); i++)
     //Sample Set:
-    //for(int i = x; i < x + 100; i++)
+    for(int i = x; i < x + 100; i++)
     {
         if(i % 100 == 0)
             cout << i << endl;
@@ -74,7 +74,7 @@ void DocumentHandler::parse(IndexInterface*& theIndex, char* argv[])
 
         //Stores document ID to emplace into map
         string id = files[i];
-        map<string,double> freqMap;
+        unordered_map<string,int> freqMap;
 
         //Parses file as plain text or html if plain text is empty
         string str = j["plain_text"];
@@ -88,7 +88,7 @@ void DocumentHandler::parse(IndexInterface*& theIndex, char* argv[])
         string word;
         while(iss >> word)
         {
-            if(stemMap.find(word) == stemMap.end())
+            if(stemMap.count(word) == 0)
             {
                 string origWord = word;
                 Porter2Stemmer::trim(word);
@@ -98,17 +98,13 @@ void DocumentHandler::parse(IndexInterface*& theIndex, char* argv[])
             else
                 word = stemMap.find(word)->second;
 
-            if(stopwords.find(word) == stopwords.end() && word != "")
+            if(stopwords.count(word) == 0 && word != "")
             {
-                auto iter = freqMap.emplace(make_pair(word,1.0));
-                if(!(iter.second))
-                {
-                    iter.first->second++;
-                }
+                freqMap[word]++;
                 numWords++;
             }
         }
-        for(map<string,double>::iterator iter = freqMap.begin(); iter != freqMap.end(); iter++)
+        for(unordered_map<string,int>::iterator iter = freqMap.begin(); iter != freqMap.end(); iter++)
         {
             map<string,double> tempMap;
             Word w(iter->first,tempMap);

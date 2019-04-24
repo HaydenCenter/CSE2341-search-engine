@@ -8,7 +8,7 @@ SOURCES += \
     documenthandler.cpp \
     porter2_stemmer.cpp \
     word.cpp \
-    hashtableadapt.cpp
+    hashtableadapt.cpp \
 
 HEADERS += \
     documenthandler.h \
@@ -17,11 +17,10 @@ HEADERS += \
     util/hash.h \
     util/string_view.h \
     porter2_stemmer.h \
-    json.hpp \
-    indexinterface.h \
     word.h \
     hashtable.h \
-    hashtableadapt.h
+    hashtableadapt.h \
+    json.hpp
 
 DISTFILES += \
     ../stopwords.txt
