@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
         cout << argv[i] << endl;
     cout << endl;
 
-    IndexInterface<Word>* theIndex = new AvlTree<Word>;
+    IndexInterface* theIndex = new AvlTree<Word>;
     DocumentHandler dh;
     dh.getFiles(argv[1]);
 

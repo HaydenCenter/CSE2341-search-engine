@@ -7,7 +7,7 @@
 using namespace std;
 
 template<class T>
-class AvlTree : public IndexInterface<T>
+class AvlTree : public IndexInterface
 {
     public:
         AvlTree();
@@ -16,10 +16,10 @@ class AvlTree : public IndexInterface<T>
         int& getNumDocsParsed();
         const T& findMin() const;
         const T& findMax() const;
-        bool contains(const T&) const;
+        bool contains(T&);
         bool isEmpty() const;
         void makeEmpty();
-        T* insert(const T&);
+        T* insert(T&);
         T* search(T);
         int count();
         void print();
@@ -88,7 +88,7 @@ const T& AvlTree<T>::findMax() const
 }
 
 template<class T>
-bool AvlTree<T>::contains(const T& x) const
+bool AvlTree<T>::contains(T& x)
 {
     return contains(x,root);
 }
@@ -111,7 +111,7 @@ void AvlTree<T>::makeEmpty()
 }
 
 template<class T>
-T* AvlTree<T>::insert(const T& x)
+T* AvlTree<T>::insert(T &x)
 {
     return insert(x,root);
 }

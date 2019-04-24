@@ -47,7 +47,7 @@ void DocumentHandler::getFiles(char* c)
 }
 
 //Function to parse all documents and save data into a map
-void DocumentHandler::parse(IndexInterface<Word>*& theIndex)
+void DocumentHandler::parse(IndexInterface*& theIndex, char* argv[])
 {
     //Used to parse a small random sample
     srand(time(NULL));
@@ -64,7 +64,7 @@ void DocumentHandler::parse(IndexInterface<Word>*& theIndex)
             cout << i << endl;
         json j;
         ifstream inFile;
-        inFile.open("../scotus/" + files[i]);
+        inFile.open(argv[1] + files[i]);
         if(!inFile.is_open())
             throw exception();
         numDocumentsParsed++;
@@ -137,7 +137,7 @@ void DocumentHandler::saveIndex(IndexInterface<Word>*& theIndex)
 }
 
 //Function to load data from saved persistant index to the IndexInterface
-void DocumentHandler::loadIndex(IndexInterface<Word>*& theIndex)
+void DocumentHandler::loadIndex(IndexInterface*& theIndex)
 {
     theIndex->makeEmpty();
     ifstream inFile;
@@ -175,7 +175,7 @@ void DocumentHandler::loadIndex(IndexInterface<Word>*& theIndex)
 }
 
 //Function to print out information required for Monday's demo
-void DocumentHandler::PrintDemoInfo(IndexInterface<Word>*& theIndex, char* word)
+void DocumentHandler::PrintDemoInfo(IndexInterface*& theIndex, char* word)
 {
     cout << "Number of documents parsed: " << theIndex->getNumDocsParsed() << endl;
     cout << "Number of unique words in the index: " << theIndex->getSize() << endl;
@@ -189,5 +189,5 @@ void DocumentHandler::PrintDemoInfo(IndexInterface<Word>*& theIndex, char* word)
     if(searchResult == nullptr)
         cout << word << " is not found within the index" << endl;
     else
-        cout << word << " is found in " << searchResult->getMap().size() << " documents." << endl;;
+        cout << word << " is found in " << searchResult->getMap().size() << " documents." << endl;
 }
