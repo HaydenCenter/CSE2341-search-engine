@@ -85,11 +85,9 @@ void DocumentHandler::parse(IndexInterface*& theIndex, char* argv[])
         istringstream iss(str);
         map<string,string> stemMap;
         double numWords = 0.0;
-        while(!iss.eof())
+        string word;
+        while(iss >> word)
         {
-            string word;
-            iss >> word;
-
             if(stemMap.find(word) == stemMap.end())
             {
                 string origWord = word;
