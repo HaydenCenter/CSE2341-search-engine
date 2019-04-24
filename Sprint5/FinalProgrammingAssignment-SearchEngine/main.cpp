@@ -78,7 +78,6 @@ int main(int argc, char* argv[])
                     cout << "Please enter one of the accepted values" << endl;
                 }
             }
-
         }
         else if(userChoice == 'i') {
             while(true) {
@@ -120,10 +119,20 @@ int main(int argc, char* argv[])
                     cout << "Please enter one of the accepted values" << endl;
                 }
             }
-
         }
         else if(userChoice == 'q') {
-            cout << "Thanks for using the Search Engine!" << endl << endl << "Goodbye!" << endl;
+            cout << "Thanks for using the Search Engine!" << endl;
+            cout << "Would you like to save the index to disk? ('y'/'n')" << endl;
+            cin >> userChoice;
+            if(userChoice == 'y') {
+                dh.saveIndex(theIndex);
+                cout << "Index was successfully saved" << endl;
+            }
+            else {
+                cout << "The Index was not saved" << endl;
+            }
+
+            cout << endl << "Goodbye!" << endl;
             break;
         }
         else {
