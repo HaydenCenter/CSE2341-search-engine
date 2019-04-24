@@ -24,9 +24,18 @@ int main(int argc, char* argv[])
     dh.getFiles(argv[1]);
 
     dh.parse(theIndex);
-    dh.loadIndex(theIndex);
     theIndex->print();
     dh.PrintDemoInfo(theIndex,argv[2]);
+
+    string word(argv[2]);
+    Porter2Stemmer::trim(word);
+    Porter2Stemmer::stem(word);
+    Word w(word);
+    vector<pair<double,string>> v1 = theIndex->search(w)->relevantDocuments(theIndex->getNumDocsParsed());
+    for(unsigned int i = 0; i < v1.size(); i++)
+    {
+        cout << v1[i].second << " relevancy = " << v1[i].first << endl;
+    }
 
     dh.saveIndex(theIndex);
     delete theIndex;
