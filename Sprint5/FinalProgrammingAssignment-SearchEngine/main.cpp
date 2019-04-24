@@ -51,7 +51,7 @@ int main(int argc, char* argv[])
     cout << "Welcome to the Search Engine" << endl << endl;
     char userChoice;
     while(true) {
-        cout << "Menu Options:" << endl;
+        cout << endl << "Menu Options:" << endl;
         cout << "+Maintenance mode (Press 'm')" << endl << "+Interactive mode (Press 'i')" << endl << "+Quit (Press 'q')" << endl;
         cin >> userChoice;
         if(userChoice == 'm') {
@@ -86,7 +86,7 @@ int main(int argc, char* argv[])
                 cout << "+Return to Main Menu (Press 'r')" << endl;
                 cin >> userChoice;
                 if(userChoice == 'b') {
-                    cout << "Would you like to use an AvlTree or a Hashtable to store the Index? ('a' for AvlTree -OR- 'h' for Hashtable): ";
+                    cout << "Would you like to use an AvlTree (Press 'a') or a Hashtable (Press 'h')?" << endl;
                     cin >> userChoice;
                     if(userChoice == 'a') {
                         theIndex = new AvlTree<Word>;
@@ -122,7 +122,8 @@ int main(int argc, char* argv[])
         }
         else if(userChoice == 'q') {
             cout << "Thanks for using the Search Engine!" << endl;
-            cout << "Would you like to save the index to disk? ('y'/'n')" << endl;
+            cout << "Would you like to save the index to disk?" << endl;
+            cout << "(Press 'y' for YES --- Press 'n' for NO)" << endl;
             cin >> userChoice;
             if(userChoice == 'y') {
                 dh.saveIndex(theIndex);
