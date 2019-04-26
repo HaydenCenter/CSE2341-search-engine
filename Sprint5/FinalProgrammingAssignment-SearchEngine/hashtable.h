@@ -1,5 +1,6 @@
 #ifndef HASHTABLE_H
 #define HASHTABLE_H
+#define MAX_STACK_SIZE 10
 #include <vector>
 #include <utility>
 #include <iostream>
@@ -31,6 +32,7 @@ template <class K, class V>
 Hashtable<K,V>::Hashtable() {
     tableSize = 5000;
     table.reserve(tableSize);
+    //table = new vector<pair<K,V>>;
     size = 0;
 }
 

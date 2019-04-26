@@ -127,7 +127,6 @@ int main(int argc, char* argv[])
             cin >> userChoice;
             if(userChoice == 'y') {
                 dh.saveIndex(theIndex);
-                cout << "Index was successfully saved" << endl;
             }
             else {
                 cout << "The Index was not saved" << endl;
