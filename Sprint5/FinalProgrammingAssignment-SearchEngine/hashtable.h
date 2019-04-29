@@ -22,17 +22,32 @@ public:
     void print();
     void output(ofstream&);
 private:
-    vector<vector<pair<K,V>>> table;
+    //vector<vector<pair<K,V>>> table;
+    void rehash();
+    vector<pair<K,V>>* table;
     int size;
     int tableSize;
     hash<string> stringhash;
 };
 
 template <class K, class V>
+void Hashtable<K,V>::rehash() {
+    vector<pair<K,V>>* newTable = new vector<pair<K,V>>[tableSize * 2];
+    for(int i = 0; i < tableSize; i++) {
+        for(int j = 0; j < table[i].size(); j++) {
+            int newHashValue = stringhash(table[i].at(j).first)%(tableSize * 2);
+            newTable[newHashValue].push_back(table[i].at(j));
+        }
+    }
+    delete[] table;
+    table = newTable;
+    tableSize = tableSize * 2;
+}
+
+template <class K, class V>
 Hashtable<K,V>::Hashtable() {
-    tableSize = 5000;
-    table.reserve(tableSize);
-    //table = new vector<pair<K,V>>;
+    tableSize = 200;
+    table = new vector<pair<K,V>>[tableSize];
     size = 0;
 }
 
@@ -50,6 +65,8 @@ V* Hashtable<K,V>::insert(const K& key, const V& value) {
     pair<K,V>* newNode = new pair<K,V>(key,value);
     int hashvalue = stringhash(key)%tableSize;
     table[hashvalue].push_back(*newNode);
+//    if(table[hashvalue].size() >= MAX_STACK_SIZE)
+//        rehash();
     return &(newNode->second);
 }
 
@@ -98,6 +115,7 @@ void Hashtable<K,V>::print() {
             for(auto iter = table[i].at(j).second.getMap().begin(); iter != table[i].at(j).second.getMap().end(); iter++) {
                 cout << iter->first << " " << iter->second << " ";
             }
+            cout << endl;
         }
     }
 }
@@ -110,6 +128,7 @@ void Hashtable<K,V>::output(ofstream& outFS) {
             for(auto iter = table[i].at(j).second.getMap().begin(); iter != table[i].at(j).second.getMap().end(); iter++) {
                 outFS << iter->first << " " << iter->second << " ";
             }
+            outFS << endl;
         }
     }
 }
