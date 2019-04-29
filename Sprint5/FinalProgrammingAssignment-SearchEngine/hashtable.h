@@ -1,6 +1,6 @@
 #ifndef HASHTABLE_H
 #define HASHTABLE_H
-#define MAX_STACK_SIZE 10
+#define MAX_CHAIN_SIZE 10
 #include <vector>
 #include <utility>
 #include <iostream>
@@ -22,7 +22,6 @@ public:
     void print();
     void output(ofstream&);
 private:
-    //vector<vector<pair<K,V>>> table;
     void rehash();
     vector<pair<K,V>>* table;
     int size;
@@ -65,7 +64,8 @@ V* Hashtable<K,V>::insert(const K& key, const V& value) {
     pair<K,V>* newNode = new pair<K,V>(key,value);
     int hashvalue = stringhash(key)%tableSize;
     table[hashvalue].push_back(*newNode);
-//    if(table[hashvalue].size() >= MAX_STACK_SIZE)
+    size++;
+//    if(table[hashvalue].size() >= MAX_CHAIN_SIZE)
 //        rehash();
     return &(newNode->second);
 }
