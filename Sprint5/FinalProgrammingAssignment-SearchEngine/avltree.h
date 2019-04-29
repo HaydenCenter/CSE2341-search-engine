@@ -264,13 +264,10 @@ void AvlTree<T>::print(AvlNode<T>* nodePtr)
 {
     if(nodePtr) {
         print(nodePtr->left);
-        cout << nodePtr->element.getWordText() << " ";
-        for(auto iter = nodePtr->element.getMap().begin(); iter != nodePtr->element.getMap().end(); iter++)
-            cout << fixed << iter->first << " " << iter->second << " ";
+        cout << nodePtr->element;
         cout << endl;
         print(nodePtr->right);
     }
-    return;
 }
 
 template<class T>
@@ -278,13 +275,10 @@ void AvlTree<T>::output(AvlNode<T>* nodePtr, ofstream& outFile)
 {
     if(nodePtr) {
         output(nodePtr->left,outFile);
-        outFile << nodePtr->element.getWordText() << " ";
-        for(auto iter = nodePtr->element.getMap().begin(); iter != nodePtr->element.getMap().end(); iter++)
-            outFile << fixed << iter->first << " " << iter->second << " ";
+        outFile << nodePtr->element;
         outFile << endl;
         output(nodePtr->right,outFile);
     }
-    return;
 }
 
 template<class T>

@@ -31,6 +31,15 @@ bool Word::operator>(const Word rhs) const
     return wordText > rhs.wordText;
 }
 
+ostream& operator<<(ostream& COUT, const Word& word)
+{
+    COUT << word.wordText << " ";
+    for(auto iter = word.freqMap.begin(); iter != word.freqMap.end(); iter++) {
+        COUT << iter->first << " " << iter-> second << " ";
+    }
+    return COUT;
+}
+
 string &Word::getWordText()
 {
     return wordText;

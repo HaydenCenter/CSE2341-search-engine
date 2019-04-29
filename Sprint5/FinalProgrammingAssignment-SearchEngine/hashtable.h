@@ -111,11 +111,7 @@ template <class K, class V>
 void Hashtable<K,V>::print() {
     for(int i = 0; i < tableSize; i++) {
         for(unsigned int j = 0; j < table[i].size(); j++) {
-            cout << table[i].at(j).second.getWordText() << " ";
-            for(auto iter = table[i].at(j).second.getMap().begin(); iter != table[i].at(j).second.getMap().end(); iter++) {
-                cout << iter->first << " " << iter->second << " ";
-            }
-            cout << endl;
+            cout << table[i].at(j).second << endl;
         }
     }
 }
@@ -124,11 +120,7 @@ template <class K, class V>
 void Hashtable<K,V>::output(ofstream& outFS) {
     for(int i = 0; i < tableSize; i++) {
         for(unsigned int j = 0; j < table[i].size(); j++) {
-            outFS << table[i].at(j).second.getWordText() << " ";
-            for(auto iter = table[i].at(j).second.getMap().begin(); iter != table[i].at(j).second.getMap().end(); iter++) {
-                outFS << iter->first << " " << iter->second << " ";
-            }
-            outFS << endl;
+            outFS << table[i].at(j).second << endl;
         }
     }
 }
