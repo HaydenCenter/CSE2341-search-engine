@@ -33,7 +33,7 @@ template <class K, class V>
 void Hashtable<K,V>::rehash() {
     vector<pair<K,V>>* newTable = new vector<pair<K,V>>[tableSize * 2];
     for(int i = 0; i < tableSize; i++) {
-        for(int j = 0; j < table[i].size(); j++) {
+        for(unsigned int j = 0; j < table[i].size(); j++) {
             int newHashValue = stringhash(table[i].at(j).first)%(tableSize * 2);
             newTable[newHashValue].push_back(table[i].at(j));
         }
@@ -63,7 +63,7 @@ template <class K, class V>
 V* Hashtable<K,V>::insert(const K& key, const V& value) {
     pair<K,V>* newNode = new pair<K,V>(key,value);
     int hashvalue = stringhash(key)%tableSize;
-    for(int i = 0; i < table[hashvalue].size(); i++)
+    for(unsigned int i = 0; i < table[hashvalue].size(); i++)
         if(table[hashvalue].at(i).first == key)
             return &(table[hashvalue].at(i).second);
     if(table[hashvalue].size() >= MAX_CHAIN_SIZE - 1) {

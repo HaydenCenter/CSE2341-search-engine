@@ -56,9 +56,9 @@ void DocumentHandler::parse(IndexInterface*& theIndex, char* inputFolder)
     int numDocumentsParsed = 0;
 
     //Full Data Set:
-    for(unsigned int i = 0; i < files.size(); i++)
+    //for(unsigned int i = 0; i < files.size(); i++)
     //Sample Set:
-    //for(int i = x; i < x + 100; i++)
+    for(int i = x; i < x + 1000; i++)
     {
         if(i % 100 == 0)
             cout << i << endl;
@@ -183,7 +183,7 @@ void DocumentHandler::printStatistics(IndexInterface*& theIndex)
 
 void DocumentHandler::getAverageWordsPerFile(IndexInterface*& theIndex) {
     double average = 0;
-    for(int i = 0; i < wordsPerFile.size(); i++) {
+    for(unsigned int i = 0; i < wordsPerFile.size(); i++) {
         average = average + wordsPerFile.at(i);
     }
     average = average / wordsPerFile.size();
