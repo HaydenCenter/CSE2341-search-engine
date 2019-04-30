@@ -13,6 +13,7 @@ class IndexInterface
         virtual ~IndexInterface() {}
         virtual int& getSize() = 0;
         virtual int& getNumDocsParsed() = 0;
+        virtual int& getAverageWordsPerFile() = 0;
         virtual Word* insert(Word&) = 0;
         virtual void makeEmpty() = 0;
         virtual bool isEmpty() const = 0;

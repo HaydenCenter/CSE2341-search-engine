@@ -175,7 +175,17 @@ void DocumentHandler::printStatistics(IndexInterface*& theIndex)
 {
     cout << "Number of documents parsed: " << theIndex->getNumDocsParsed() << endl;
     cout << "Number of unique words in the index: " << theIndex->getSize() << endl;
-    //include average number of words per document
+    getAverageWordsPerFile(theIndex);
+    cout << "Average number of words indexed per opinion: " << theIndex->getAverageWordsPerFile() << endl;
     //include top 50 most frequent words
 
+}
+
+void DocumentHandler::getAverageWordsPerFile(IndexInterface*& theIndex) {
+    double average = 0;
+    for(int i = 0; i < wordsPerFile.size(); i++) {
+        average = average + wordsPerFile.at(i);
+    }
+    average = average / wordsPerFile.size();
+    theIndex->getAverageWordsPerFile() = average;
 }

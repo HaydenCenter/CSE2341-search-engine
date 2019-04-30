@@ -10,6 +10,7 @@ public:
     ~HashtableAdapt();
     int& getSize();
     int& getNumDocsParsed();
+    int& getAverageWordsPerFile();
     Word* insert(Word&);
     void makeEmpty();
     bool isEmpty() const;
@@ -20,6 +21,7 @@ public:
 private:
     Hashtable<string,Word> theIndex;
     int numDocsParsed;
+    int averageWordsPerFile;
 };
 
 #endif // HASHTABLEADAPT_H

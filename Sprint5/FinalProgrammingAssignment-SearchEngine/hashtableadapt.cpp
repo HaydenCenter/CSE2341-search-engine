@@ -15,6 +15,10 @@ int& HashtableAdapt::getNumDocsParsed() {
     return numDocsParsed;
 }
 
+int& HashtableAdapt::getAverageWordsPerFile() {
+    return averageWordsPerFile;
+}
+
 
 Word* HashtableAdapt::insert(Word& elementToAdd) {
     return theIndex.insert(elementToAdd.getWordText(),elementToAdd);

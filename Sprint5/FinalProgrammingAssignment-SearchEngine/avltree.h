@@ -14,6 +14,7 @@ class AvlTree : public IndexInterface
         ~AvlTree();
         int& getSize();
         int& getNumDocsParsed();
+        int& getAverageWordsPerFile();
         const T& findMin() const;
         const T& findMax() const;
         bool contains(T&);
@@ -28,6 +29,7 @@ class AvlTree : public IndexInterface
         AvlNode<T>* root;
         int size;
         int numDocsParsed;
+        int averageWordsPerFile;
         int height(AvlNode<T>*) const;
         int max(int,int) const;
         AvlNode<T>* findMin(AvlNode<T>*);
@@ -69,6 +71,12 @@ template<class T>
 int& AvlTree<T>::getNumDocsParsed()
 {
     return numDocsParsed;
+}
+
+template<class T>
+int& AvlTree<T>::getAverageWordsPerFile()
+{
+    return averageWordsPerFile;
 }
 
 template<class T>

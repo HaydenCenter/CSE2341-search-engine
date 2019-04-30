@@ -27,6 +27,7 @@ public:
     void saveIndex(IndexInterface*&);
     void loadIndex(IndexInterface*&);
     void printStatistics(IndexInterface*&);
+    void getAverageWordsPerFile(IndexInterface*&);
 private:
     vector<string> files;
     set<string> stopwords;

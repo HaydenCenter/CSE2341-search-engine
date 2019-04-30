@@ -22,7 +22,8 @@ HEADERS += \
     hashtable.h \
     hashtableadapt.h \
     json.hpp \
-    query.h
+    query.h \
+    indexinterface.h
 
 DISTFILES += \
     ../stopwords.txt
