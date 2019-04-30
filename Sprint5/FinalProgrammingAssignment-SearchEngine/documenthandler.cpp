@@ -111,6 +111,7 @@ void DocumentHandler::parse(IndexInterface*& theIndex, char* inputFolder)
             Word* wordPtr = theIndex->insert(w);
             wordPtr->getMap().emplace(make_pair(id,(iter->second/numWords) * 10000));
         }
+        wordsPerFile.push_back(numWords);
     }
     cout << endl;
     theIndex->getNumDocsParsed() += numDocumentsParsed;
