@@ -13,7 +13,6 @@ using namespace std::chrono;
 
 int main(int argc, char* argv[])
 {
-//    auto start = high_resolution_clock::now();
 
     cout << argc << endl;
     for(int i = 0; i < argc; i++)
@@ -39,10 +38,6 @@ int main(int argc, char* argv[])
 
 //    dh.saveIndex(theIndex);
 //    delete theIndex;
-
-//    auto end = high_resolution_clock::now();
-//    auto duration = duration_cast<microseconds>(end - start);
-//    cout << "Runtime: " << duration.count()/1000000.0 << " seconds" << endl;
 
 
     IndexInterface* theIndex;
@@ -73,7 +68,11 @@ int main(int argc, char* argv[])
         cout << "Loading index..." << endl;
         if(userChoice == 's') {
             dh.getFiles(argv[1]);
+            auto start = high_resolution_clock::now();
             dh.parse(theIndex,argv[1]);
+            auto end = high_resolution_clock::now();
+            auto duration = duration_cast<microseconds>(end - start);
+            cout << "Runtime: " << duration.count()/1000000.0 << " seconds" << endl;
             break;
         }
         else if(userChoice == 'p') {
