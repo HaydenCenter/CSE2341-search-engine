@@ -15,10 +15,10 @@ int main(int argc, char* argv[])
 {
 //    auto start = high_resolution_clock::now();
 
-//    cout << argc << endl;
-//    for(int i = 0; i < argc; i++)
-//        cout << argv[i] << endl;
-//    cout << endl;
+    cout << argc << endl;
+    for(int i = 0; i < argc; i++)
+        cout << argv[i] << endl;
+    cout << endl;
 
 //    IndexInterface* theIndex = new AvlTree<Word>;
 //    DocumentHandler dh;
@@ -60,7 +60,7 @@ int main(int argc, char* argv[])
                 cout << "+Clear the Index (Press 'c')" << endl << "+Return to Main Menu (Press 'r')" << endl;
                 cin >> userChoice;
                 if(userChoice == 'a') {
-                    char* newFilePath;
+                    char* newFilePath = new char[255];
                     cout << "Please enter a new file path to add files: ";
                     cin >> newFilePath;
                     dh.getFiles(newFilePath);
