@@ -58,7 +58,7 @@ void DocumentHandler::parse(IndexInterface*& theIndex, char* inputFolder)
     //Full Data Set:
     //for(unsigned int i = 0; i < files.size(); i++)
     //Sample Set:
-    for(int i = x; i < x + 100; i++)
+    for(int i = x; i < 1; i++)
     {
         if(i % 100 == 0)
             cout << i << endl;
