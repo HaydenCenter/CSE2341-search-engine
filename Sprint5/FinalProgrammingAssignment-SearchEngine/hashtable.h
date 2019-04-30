@@ -1,6 +1,6 @@
 #ifndef HASHTABLE_H
 #define HASHTABLE_H
-#define MAX_CHAIN_SIZE 10
+#define MAX_CHAIN_SIZE 20
 #include <vector>
 #include <utility>
 #include <iostream>
@@ -45,7 +45,7 @@ void Hashtable<K,V>::rehash() {
 
 template <class K, class V>
 Hashtable<K,V>::Hashtable() {
-    tableSize = 200;
+    tableSize = 10000;
     table = new vector<pair<K,V>>[tableSize];
     size = 0;
 }
@@ -63,11 +63,16 @@ template <class K, class V>
 V* Hashtable<K,V>::insert(const K& key, const V& value) {
     pair<K,V>* newNode = new pair<K,V>(key,value);
     int hashvalue = stringhash(key)%tableSize;
+    for(int i = 0; i < table[hashvalue].size(); i++)
+        if(table[hashvalue].at(i).first == key)
+            return &(table[hashvalue].at(i).second);
+    if(table[hashvalue].size() >= MAX_CHAIN_SIZE - 1) {
+        rehash();
+        hashvalue = stringhash(key)%tableSize;
+    }
     table[hashvalue].push_back(*newNode);
     size++;
-//    if(table[hashvalue].size() >= MAX_CHAIN_SIZE)
-//        rehash();
-    return &(newNode->second);
+    return &(table[hashvalue].at(table[hashvalue].size()-1).second);
 }
 
 template <class K, class V>
