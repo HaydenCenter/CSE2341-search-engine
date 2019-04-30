@@ -50,6 +50,40 @@ int main(int argc, char* argv[])
 
     cout << "Welcome to the Search Engine" << endl << endl;
     char userChoice;
+
+    while(true) {
+        cout << "Would you like to use an AvlTree (Press 'a') or a Hashtable (Press 'h')?" << endl;
+        cin >> userChoice;
+        if(userChoice == 'a') {
+            theIndex = new AvlTree<Word>;
+            break;
+        }
+        else if(userChoice == 'h') {
+            theIndex = new HashtableAdapt;
+            break;
+        }
+        else {
+            cout << "Please enter one of the accepted values" << endl;
+        }
+    }
+
+    while(true) {
+        cout << "Would you like to load the index from scratch (Press 's') -OR- from a persisted index (Press 'p')" << endl;
+        cin >> userChoice;
+        cout << "Loading index..." << endl;
+        if(userChoice == 's') {
+            dh.getFiles(argv[1]);
+            dh.parse(theIndex,argv[1]);
+            break;
+        }
+        else if(userChoice == 'p') {
+            dh.loadIndex(theIndex);
+            break;
+        }
+    }
+
+    cout << "Index was created successfully" << endl << endl;
+
     while(true) {
         cout << endl << "Menu Options:" << endl;
         cout << "+Maintenance mode (Press 'm')" << endl << "+Interactive mode (Press 'i')" << endl << "+Quit (Press 'q')" << endl;
@@ -83,33 +117,11 @@ int main(int argc, char* argv[])
             while(true) {
                 cout << endl
                      << "Interactive Mode Menu:" << endl
-                     << "+Build the Index (Press 'b')" << endl
                      << "+Search the Search Engine (Press 's')" << endl
                      << "+Print Search Engine Statistics (Press 'p')" << endl
                      << "+Return to Main Menu (Press 'r')" << endl;
                 cin >> userChoice;
-                if(userChoice == 'b') {
-                    cout << "Would you like to use an AvlTree (Press 'a') or a Hashtable (Press 'h')?" << endl;
-                    cin >> userChoice;
-                    if(userChoice == 'a') {
-                        theIndex = new AvlTree<Word>;
-                    }
-                    else if(userChoice == 'h') {
-                        theIndex = new HashtableAdapt;
-                    }
-                    cout << "Would you like to load the index from scratch (Press 's') -OR- from a persisted index (Press 'p')" << endl;
-                    cin >> userChoice;
-                    cout << "Loading index..." << endl;
-                    if(userChoice == 's') {
-                        dh.getFiles(argv[1]);
-                        dh.parse(theIndex,argv[1]);
-                    }
-                    else if(userChoice == 'p') {
-                        dh.loadIndex(theIndex);
-                    }
-                    cout << "Index was created successfully" << endl;
-                }
-                else if (userChoice == 's') {
+                if (userChoice == 's') {
                     //add search code
                 }
                 else if(userChoice == 'p') {

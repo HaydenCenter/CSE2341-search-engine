@@ -30,6 +30,7 @@ public:
 private:
     vector<string> files;
     set<string> stopwords;
+    vector<double> wordsPerFile;
 };
 
 #endif // DOCUMENTHANDLER_H
