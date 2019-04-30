@@ -81,9 +81,12 @@ int main(int argc, char* argv[])
         }
         else if(userChoice == 'i') {
             while(true) {
-                cout << endl << "Interactive Mode Menu:" << endl << "+Build the Index (Press 'b')" << endl;
-                cout << "+Search the Search Engine (Press 's')" << endl << "+Print Search Engine Statistics (Press 'p')" << endl;
-                cout << "+Return to Main Menu (Press 'r')" << endl;
+                cout << endl
+                     << "Interactive Mode Menu:" << endl
+                     << "+Build the Index (Press 'b')" << endl
+                     << "+Search the Search Engine (Press 's')" << endl
+                     << "+Print Search Engine Statistics (Press 'p')" << endl
+                     << "+Return to Main Menu (Press 'r')" << endl;
                 cin >> userChoice;
                 if(userChoice == 'b') {
                     cout << "Would you like to use an AvlTree (Press 'a') or a Hashtable (Press 'h')?" << endl;
