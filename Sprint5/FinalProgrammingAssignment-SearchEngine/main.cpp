@@ -11,39 +11,7 @@
 
 using namespace std::chrono;
 
-int main(int argc, char* argv[])
-{
-
-    cout << argc << endl;
-    for(int i = 0; i < argc; i++)
-        cout << argv[i] << endl;
-    cout << endl;
-
-//    IndexInterface* theIndex = new AvlTree<Word>;
-//    DocumentHandler dh;
-//    dh.getFiles(argv[1]);
-
-//    dh.parse(theIndex,argv);
-//    dh.PrintDemoInfo(theIndex,argv[2]);
-
-//    string word(argv[2]);
-//    Porter2Stemmer::trim(word);
-//    Porter2Stemmer::stem(word);
-//    Word w(word);
-//    vector<pair<double,string>> v1 = theIndex->search(w)->relevantDocuments(theIndex->getNumDocsParsed());
-//    for(unsigned int i = 0; i < v1.size(); i++)
-//    {
-//        cout << v1[i].second << " relevancy = " << v1[i].first << endl;
-//    }
-
-//    dh.saveIndex(theIndex);
-//    delete theIndex;
-
-
-    IndexInterface* theIndex;
-    DocumentHandler dh;
-
-    cout << "Welcome to the Search Engine" << endl << endl;
+void createIndex(IndexInterface*& theIndex, DocumentHandler& dh, char* filesToLoad) {
     char userChoice;
 
     while(true) {
@@ -67,9 +35,9 @@ int main(int argc, char* argv[])
         cin >> userChoice;
         cout << "Loading index..." << endl;
         if(userChoice == 's') {
-            dh.getFiles(argv[1]);
+            dh.getFiles(filesToLoad);
             auto start = high_resolution_clock::now();
-            dh.parse(theIndex,argv[1]);
+            dh.parse(theIndex,filesToLoad);
             auto end = high_resolution_clock::now();
             auto duration = duration_cast<microseconds>(end - start);
             cout << "Runtime: " << duration.count()/1000000.0 << " seconds" << endl;
@@ -82,6 +50,21 @@ int main(int argc, char* argv[])
     }
 
     cout << "Index was created successfully" << endl << endl;
+}
+
+int main(int argc, char* argv[])
+{
+    cout << argc << endl;
+    for(int i = 0; i < argc; i++)
+        cout << argv[i] << endl;
+    cout << endl;
+
+    IndexInterface* theIndex;
+    DocumentHandler dh;
+
+    cout << "Welcome to the Search Engine" << endl << endl;
+    char userChoice;
+    createIndex(theIndex,dh,argv[1]);
 
     while(true) {
         cout << endl << "Menu Options:" << endl;
@@ -103,6 +86,11 @@ int main(int argc, char* argv[])
                     cout << "Clearing the Index... ";
                     theIndex->makeEmpty();
                     cout << "Complete" << endl;
+                    cout << "Would you like to create a new index? (Press 'y' for YES --- Press 'n' for NO)" << endl;
+                    cin >> userChoice;
+                    if(userChoice == 'y') {
+                        createIndex(theIndex,dh,argv[1]);
+                    }
                 }
                 else if(userChoice == 'r') {
                     break;
