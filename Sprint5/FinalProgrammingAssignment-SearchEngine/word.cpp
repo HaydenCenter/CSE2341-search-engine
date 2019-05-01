@@ -60,18 +60,14 @@ void Word::setMap(map<string,double> mapToSet)
     freqMap = mapToSet;
 }
 
-vector<pair<double,string>> Word::relevantDocuments(int numDocsParsed)
+map<string,double> Word::relevantDocuments(int numDocsParsed)
 {
-
-    vector<pair<double,string>> result;
     for(map<string,double>::iterator iter = freqMap.begin(); iter != freqMap.end(); iter++)
     {
         double TF = iter->second;
         double IDF = log((1.0 * numDocsParsed)/freqMap.size());
         double TFIDF = TF * IDF;
-        result.push_back(make_pair(TFIDF,iter->first));
+        iter->second = TFIDF;
     }
-    sort(result.begin(),result.end());
-    reverse(result.begin(),result.end());
-    return result;
+    return freqMap;
 }
