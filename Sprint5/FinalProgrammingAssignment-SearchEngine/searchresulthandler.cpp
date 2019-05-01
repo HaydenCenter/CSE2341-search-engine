@@ -49,6 +49,19 @@ void SearchResultHandler::displaySearchResults(char* inputFolder) {
     }
 }
 
-void SearchResultHandler::openFileInfo(string fileToOpen) {
+void SearchResultHandler::openFileInfo(char* inputFolder, string fileToOpen) {
+    json j;
+    ifstream inFS;
+    inFS.open(inputFolder + fileToOpen);
+    if(!inFS.is_open())
+        throw exception();
+    inFS >> j;
+    inFS.close();
+
+    string docText = j["plain_text"];
+    if(docText == "")
+        docText = j["html"];
+
+    //finish
 
 }
