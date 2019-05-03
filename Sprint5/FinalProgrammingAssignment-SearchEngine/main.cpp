@@ -83,6 +83,7 @@ int main(int argc, char* argv[])
                     cin >> newFilePath;
                     dh.getFiles(newFilePath);
                     dh.parse(theIndex,newFilePath);
+                    delete[] newFilePath;
                 }
                 else if(userChoice == 'c') {
                     cout << "Clearing the Index... ";
