@@ -52,7 +52,7 @@ void SearchResultHandler::displaySearchResults() {
 void SearchResultHandler::openFileInfo(string fileToOpen) {
     json j;
     ifstream inFS;
-    inFS.open(inputFolder + fileToOpen);
+    inFS.open(fileToOpen);
     if(!inFS.is_open())
         throw exception();
     inFS >> j;
