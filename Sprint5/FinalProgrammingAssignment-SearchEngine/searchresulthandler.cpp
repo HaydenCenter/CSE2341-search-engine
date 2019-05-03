@@ -1,5 +1,6 @@
 #include "searchresulthandler.h"
 
+//Displays top search results and allows user to select a file to view
 SearchResultHandler::SearchResultHandler(vector<string> filesToSet)
 {
     fileNames = filesToSet;
@@ -26,6 +27,7 @@ SearchResultHandler::SearchResultHandler(vector<string> filesToSet)
     }
 }
 
+//Displays top 15 results and their court case name
 void SearchResultHandler::displaySearchResults() {
     cout << "Search Results:" << endl;
     for(int i = 0; i < fileNames.size(); i ++) {
@@ -49,6 +51,7 @@ void SearchResultHandler::displaySearchResults() {
     }
 }
 
+//Opens a specific file and prints out the first 100 words
 void SearchResultHandler::openFileInfo(string fileToOpen) {
     json j;
     ifstream inFS;
