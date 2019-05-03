@@ -28,10 +28,10 @@ void SearchResultHandler::displaySearchResults() {
 
         caseName[0] = toupper(caseName[0]);
         for(unsigned int j = 1; j < caseName.length(); j++) {
-            if(caseName[i] == '-')
-                caseName[i] = ' ';
-            if(caseName[i] == ' ')
-                caseName[i + 1] = toupper(caseName[i + 1]);
+            if(caseName[j] == '-')
+                caseName[j] = ' ';
+            if(caseName[j] == ' ')
+                caseName[j + 1] = toupper(caseName[j + 1]);
         }
 
         cout << "(" << i+1 << ") - " << fileNames.at(i) << ": " << caseName << endl;

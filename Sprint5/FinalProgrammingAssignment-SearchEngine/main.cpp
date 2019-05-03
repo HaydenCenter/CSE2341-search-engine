@@ -170,7 +170,11 @@ int main(int argc, char* argv[])
             cin >> userChoice;
             cout << endl;
             if(userChoice == 'y') {
+                auto start = high_resolution_clock::now();
                 dh.saveIndex(theIndex);
+                auto end = high_resolution_clock::now();
+                auto duration = duration_cast<microseconds>(end - start);
+                cout << "Runtime: " << duration.count()/1000000.0 << " seconds" << endl;
             }
             else {
                 cout << "The Index was not saved" << endl;
