@@ -5,6 +5,7 @@
 #include <json.hpp>
 #include <fstream>
 #include <sstream>
+#include <cctype>
 
 using json = nlohmann::json;
 using namespace std;
@@ -15,7 +16,7 @@ class SearchResultHandler
 public:
     SearchResultHandler(vector<string>);
     void displaySearchResults();
-    void openFileInfo(string);
+    void openFileInfo();
 private:
     vector<string> fileNames;
 

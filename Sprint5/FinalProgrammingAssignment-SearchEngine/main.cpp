@@ -16,15 +16,18 @@ using namespace std::chrono;
 
 void createIndex(IndexInterface*& theIndex, DocumentHandler& dh, char* filesToLoad) {
     char userChoice;
-
     while(true) {
-        cout << "Would you like to use an AvlTree (Press 'a') or a Hashtable (Press 'h')?" << endl;
+        cout << endl;
+        cout << "What type of index would you like to use?" << endl;
+        cout << "(1) - AvlTree" << endl;
+        cout << "(2) - HashTable" << endl;
+        cout << "Select one: ";
         cin >> userChoice;
-        if(userChoice == 'a') {
+        if(userChoice == '1') {
             theIndex = new AvlTree<Word>;
             break;
         }
-        else if(userChoice == 'h') {
+        else if(userChoice == '2') {
             theIndex = new HashtableAdapt;
             break;
         }
@@ -34,25 +37,36 @@ void createIndex(IndexInterface*& theIndex, DocumentHandler& dh, char* filesToLo
     }
 
     while(true) {
-        cout << "Would you like to load the index from scratch (Press 's') -OR- from a persisted index (Press 'p')" << endl;
+        cout << endl << "How would you like it build the index?" << endl;
+        cout << "(1) - Create new index" << endl;
+        cout << "(2) - Load saved index" << endl;
+        cout << "Select one: ";
         cin >> userChoice;
-        cout << "Loading index..." << endl;
-        if(userChoice == 's') {
+        if(userChoice == '1') {
+            cout << endl << "Loading index..." << endl;
             dh.getFiles(filesToLoad);
             auto start = high_resolution_clock::now();
             dh.parse(theIndex,filesToLoad);
             auto end = high_resolution_clock::now();
             auto duration = duration_cast<microseconds>(end - start);
+            cout << "Index Loaded" << endl;
             cout << "Runtime: " << duration.count()/1000000.0 << " seconds" << endl;
             break;
         }
-        else if(userChoice == 'p') {
+        else if(userChoice == '2') {
+            cout << endl << "Loading index..." << endl;
+            auto start = high_resolution_clock::now();
             dh.loadIndex(theIndex);
+            auto end = high_resolution_clock::now();
+            auto duration = duration_cast<microseconds>(end - start);
+            cout << "Index Loaded" << endl;
+            cout << "Runtime: " << duration.count()/1000000.0 << " seconds" << endl;
             break;
         }
+        else {
+            cout << "Please enter one of the accepted values" << endl;
+        }
     }
-
-    cout << "Index was created successfully" << endl << endl;
 }
 
 int main(int argc, char* argv[])
@@ -65,74 +79,96 @@ int main(int argc, char* argv[])
     IndexInterface* theIndex;
     DocumentHandler dh;
 
-    cout << "Welcome to the Search Engine" << endl << endl;
+    cout << "Welcome to the Search Engine" << endl;
     char userChoice;
     createIndex(theIndex,dh,argv[1]);
 
     while(true) {
-        cout << endl << "Menu Options:" << endl;
-        cout << "+Maintenance mode (Press 'm')" << endl << "+Interactive mode (Press 'i')" << endl << "+Quit (Press 'q')" << endl;
+        cout << endl << "Main Menu:" << endl;
+        cout << "(1) - Interactive Mode" << endl;
+        cout << "(2) - Maintenance Mode" << endl;
+        cout << "(3) - Quit" << endl;
+        cout << "Select one: ";
         cin >> userChoice;
-        if(userChoice == 'm') {
+        if(userChoice == '1') {
+            cout << endl;
             while(true) {
-                cout << endl << "Maintenence Mode Menu:" << endl << "+Add Opinions to Index (Press 'a')" << endl;
-                cout << "+Clear the Index (Press 'c')" << endl << "+Return to Main Menu (Press 'r')" << endl;
+                cout << "Interactive Mode:" << endl;
+                cout << "(1) - Search" << endl;
+                cout << "(2) - Print Statistics" << endl;
+                cout << "(3) - Return to Main Menu" << endl;
+                cout << "Select One: ";
                 cin >> userChoice;
-                if(userChoice == 'a') {
+                if (userChoice == '1') {
+                    cout << endl;
+                    Query q(theIndex);
+                }
+                else if(userChoice == '2') {
+                    cout << endl;
+                    dh.printStatistics(theIndex);
+                }
+                else if(userChoice == '3') {
+                    break;
+                }
+                else {
+                    cout << "Please enter one of the accepted values" << endl;
+                }
+                cout << endl;
+            }
+        }
+        else if(userChoice == '2') {
+            cout << endl;
+            while(true) {
+                cout << "Maintenence Mode:" << endl;
+                cout << "(1) - Add Opinions" << endl;
+                cout << "(2) - Clear the Index" << endl;
+                cout << "(3) - Return to Main Menu" << endl;
+                cout << "Select one: ";
+                cin >> userChoice;
+                if(userChoice == '1') {
+                    cout << endl;
                     char* newFilePath = new char[255];
                     cout << "Please enter a new file path to add files: ";
                     cin >> newFilePath;
-                    dh.getFiles(newFilePath);
-                    dh.parse(theIndex,newFilePath);
+                    try
+                    {
+                        dh.getFiles(newFilePath);
+                        dh.parse(theIndex,newFilePath);
+                    }
+                    catch(invalid_argument e)
+                    {
+                        cout << e.what() << endl;
+                    }
                     delete[] newFilePath;
                 }
-                else if(userChoice == 'c') {
-                    cout << "Clearing the Index... ";
+                else if(userChoice == '2') {
+                    cout << endl;
+                    cout << "Clearing the Index..." << endl;
                     theIndex->makeEmpty();
                     dh.clearStatistics();
-                    cout << "Complete" << endl;
-                    cout << "Would you like to create a new index? (Press 'y' for YES --- Press 'n' for NO)" << endl;
+                    cout << "Index Cleared" << endl << endl;
+                    cout << "Would you like to build a new index? (y/n) ";
                     cin >> userChoice;
                     if(userChoice == 'y') {
                         delete theIndex;
                         createIndex(theIndex,dh,argv[1]);
                     }
                 }
-                else if(userChoice == 'r') {
+                else if(userChoice == '3') {
                     break;
                 }
                 else{
                     cout << "Please enter one of the accepted values" << endl;
                 }
+                cout << endl;
             }
         }
-        else if(userChoice == 'i') {
-            while(true) {
-                cout << endl
-                     << "Interactive Mode Menu:" << endl
-                     << "+Search the Search Engine (Press 's')" << endl
-                     << "+Print Search Engine Statistics (Press 'p')" << endl
-                     << "+Return to Main Menu (Press 'r')" << endl;
-                cin >> userChoice;
-                if (userChoice == 's') {
-                    Query q(theIndex);
-                }
-                else if(userChoice == 'p') {
-                    dh.printStatistics(theIndex);
-                }
-                else if(userChoice == 'r') {
-                    break;
-                }
-                else {
-                    cout << "Please enter one of the accepted values" << endl;
-                }
-            }
-        }
-        else if(userChoice == 'q') {
-            cout << "Thanks for using the Search Engine!" << endl;
-            cout << "Would you like to save the index to disk?" << endl;
-            cout << "(Press 'y' for YES --- Press 'n' for NO)" << endl;
+        else if(userChoice == '3') {
+            cout << endl;
+            cout << "Thanks for using the Search Engine!" << endl << endl;
+            cout << "Would you like to save the index to disk? (y/n) ";
             cin >> userChoice;
+            cout << endl;
             if(userChoice == 'y') {
                 dh.saveIndex(theIndex);
             }
@@ -140,7 +176,7 @@ int main(int argc, char* argv[])
                 cout << "The Index was not saved" << endl;
             }
 
-            cout << endl << "Goodbye!" << endl;
+            cout << endl << "Goodbye!" << endl << endl;
             break;
         }
         else {

@@ -4,33 +4,12 @@
 SearchResultHandler::SearchResultHandler(vector<string> filesToSet)
 {
     fileNames = filesToSet;
-    displaySearchResults();
-
-    cout << "Please indicate which file you would like to open by typing full file name & path: ";
-    while(true) {
-        string fileToOpen;
-        cin >> fileToOpen;
-        cout << endl;
-        bool isPresent = false;
-        for(int i = 0; i < fileNames.size(); i++) {
-            if(fileToOpen == fileNames.at(i))
-                isPresent = true;
-        }
-
-        if(isPresent) {
-            openFileInfo(fileToOpen);
-            break;
-        }
-        else {
-            cout << "Please enter an acceptable file name: ";
-        }
-    }
 }
 
 //Displays top 15 results and their court case name
 void SearchResultHandler::displaySearchResults() {
     cout << "Search Results:" << endl;
-    for(int i = 0; i < fileNames.size(); i ++) {
+    for(unsigned int i = 0; i < fileNames.size(); i ++) {
         json j;
         ifstream inFS;
         inFS.open(fileNames.at(i));
@@ -47,26 +26,52 @@ void SearchResultHandler::displaySearchResults() {
             getline(iss, caseName, '/');
         }
 
-        cout << fileNames.at(i) << ": " << caseName << endl;
+        caseName[0] = toupper(caseName[0]);
+        for(unsigned int j = 1; j < caseName.length(); j++) {
+            if(caseName[i] == '-')
+                caseName[i] = ' ';
+            if(caseName[i] == ' ')
+                caseName[i + 1] = toupper(caseName[i + 1]);
+        }
+
+        cout << "(" << i+1 << ") - " << fileNames.at(i) << ": " << caseName << endl;
     }
 }
 
 //Opens a specific file and prints out the first 100 words
-void SearchResultHandler::openFileInfo(string fileToOpen) {
-    json j;
-    ifstream inFS;
-    inFS.open(fileToOpen);
-    if(!inFS.is_open())
-        throw exception();
-    inFS >> j;
-    inFS.close();
+void SearchResultHandler::openFileInfo() {
+    cout << "Please indicate which file you would like to open by typing full file name & path: ";
+    while(true) {
+        string fileToOpen;
+        cin >> fileToOpen;
+        cout << endl;
+        bool isPresent = false;
+        for(unsigned int i = 0; i < fileNames.size(); i++) {
+            if(fileToOpen == fileNames.at(i))
+                isPresent = true;
+        }
 
-    string docText = j["plain_text"];
-    if(docText == "")
-        docText = j["html"];
+        if(isPresent) {
+            json j;
+            ifstream inFS;
+            inFS.open(fileToOpen);
+            if(!inFS.is_open())
+                throw exception();
+            inFS >> j;
+            inFS.close();
 
-    for(int i = 0; i < 300; i++) {
-        cout << docText.at(i);
+            string docText = j["plain_text"];
+            if(docText == "")
+                docText = j["html"];
+
+            for(int i = 0; i < 300; i++) {
+                cout << docText.at(i);
+            }
+            cout << endl;
+            break;
+        }
+        else {
+            cout << "Please enter an acceptable file name: ";
+        }
     }
-    cout << endl;
 }

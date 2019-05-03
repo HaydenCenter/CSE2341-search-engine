@@ -7,6 +7,7 @@
 #include <algorithm>
 #include "indexinterface.h"
 #include "word.h"
+#include "searchresulthandler.h"
 
 using namespace std;
 

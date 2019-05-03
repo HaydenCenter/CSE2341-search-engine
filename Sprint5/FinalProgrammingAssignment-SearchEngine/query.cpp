@@ -2,10 +2,11 @@
 
 Query::Query(IndexInterface*& theIndex)
 {
-    cout << "Enter Query: " << endl;
+    cout << "Enter Query: ";
     string query;
     cin.ignore();
     getline(cin,query);
+    cout << endl;
     istringstream iss(query);
     string word;
     bool NOT = false;
@@ -132,13 +133,11 @@ Query::Query(IndexInterface*& theIndex)
     for(map<double,string>::reverse_iterator iter = invertedRelevancyMap.rbegin(); iter != invertedRelevancyMap.rend() && count < 15; iter++)
     {
         relevantFiles.push_back(iter->second);
-        //cout << iter->first << " " << iter->second << endl;
         count++;
     }
-    for(unsigned int i = 0; i < relevantFiles.size(); i++)
-    {
-        cout << relevantFiles[i] << endl;
-    }
+
+    SearchResultHandler SRH(relevantFiles);
+    SRH.displaySearchResults();
 }
 
 vector<string> Query::getRelevantFiles()

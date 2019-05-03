@@ -53,14 +53,14 @@ void DocumentHandler::parse(IndexInterface*& theIndex, char* inputFolder)
     wordsPerFile.clear();
     //Used to parse a small random sample
     srand(time(NULL));
-    int x = 0;
+    //int x = 0;
     //int x = rand() % 68390 - 100;
     int numDocumentsParsed = 0;
 
     //Full Data Set:
-    //for(unsigned int i = 0; i < files.size(); i++)
+    for(unsigned int i = 0; i < files.size(); i++)
     //Sample Set:
-    for(int i = x; i < x + 100; i++)
+    //for(int i = x; i < x + 100; i++)
     {
         if(i % 100 == 0)
             cout << i << endl;
@@ -68,7 +68,7 @@ void DocumentHandler::parse(IndexInterface*& theIndex, char* inputFolder)
         ifstream inFile;
         inFile.open(inputFolder + files[i]);
         if(!inFile.is_open())
-            throw exception();
+            throw invalid_argument("Provided path could not be opened");
         numDocumentsParsed++;
         //Stores entire file into json object
         inFile >> j;
