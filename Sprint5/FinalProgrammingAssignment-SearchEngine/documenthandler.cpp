@@ -109,7 +109,7 @@ void DocumentHandler::parse(IndexInterface*& theIndex, char* inputFolder)
             map<string,double> tempMap;
             Word w(iter->first,tempMap);
             Word* wordPtr = theIndex->insert(w);
-            wordPtr->getMap().emplace(make_pair(id,(iter->second/numWords) * 10000));
+            wordPtr->getMap().emplace(make_pair((inputFolder + id),(iter->second/numWords) * 10000));
         }
         wordsPerFile.push_back(numWords);
     }

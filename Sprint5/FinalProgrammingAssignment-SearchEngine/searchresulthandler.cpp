@@ -1,11 +1,11 @@
 #include "searchresulthandler.h"
 
-SearchResultHandler::SearchResultHandler(vector<string> filesToSet, char* inputFolder)
+SearchResultHandler::SearchResultHandler(vector<string> filesToSet)
 {
     fileNames = filesToSet;
-    displaySearchResults(inputFolder);
+    displaySearchResults();
 
-    cout << "Please indicate which file you would like to open by typing full file name: ";
+    cout << "Please indicate which file you would like to open by typing full file name & path: ";
     while(true) {
         string fileToOpen;
         cin >> fileToOpen;
@@ -26,12 +26,12 @@ SearchResultHandler::SearchResultHandler(vector<string> filesToSet, char* inputF
     }
 }
 
-void SearchResultHandler::displaySearchResults(char* inputFolder) {
+void SearchResultHandler::displaySearchResults() {
     cout << "Search Results:" << endl;
     for(int i = 0; i < fileNames.size(); i ++) {
         json j;
         ifstream inFS;
-        inFS.open(inputFolder + fileNames.at(i));
+        inFS.open(fileNames.at(i));
         if(!inFS.is_open())
             throw exception();
         inFS >> j;
@@ -49,7 +49,7 @@ void SearchResultHandler::displaySearchResults(char* inputFolder) {
     }
 }
 
-void SearchResultHandler::openFileInfo(char* inputFolder, string fileToOpen) {
+void SearchResultHandler::openFileInfo(string fileToOpen) {
     json j;
     ifstream inFS;
     inFS.open(inputFolder + fileToOpen);
@@ -62,6 +62,8 @@ void SearchResultHandler::openFileInfo(char* inputFolder, string fileToOpen) {
     if(docText == "")
         docText = j["html"];
 
-    //finish
-
+    for(int i = 0; i < 300; i++) {
+        cout << docText.at(i);
+    }
+    cout << endl;
 }

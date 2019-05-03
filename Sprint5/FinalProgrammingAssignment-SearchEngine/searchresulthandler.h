@@ -13,9 +13,9 @@ using namespace std;
 class SearchResultHandler
 {
 public:
-    SearchResultHandler(vector<string>,char*);
-    void displaySearchResults(char*);
-    void openFileInfo(char*,string);
+    SearchResultHandler(vector<string>);
+    void displaySearchResults();
+    void openFileInfo(string);
 private:
     vector<string> fileNames;
 
