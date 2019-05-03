@@ -10,6 +10,7 @@
 #include "indexinterface.h"
 #include "avltree.h"
 #include "hashtableadapt.h"
+#include "query.h"
 
 using namespace std::chrono;
 
@@ -114,7 +115,7 @@ int main(int argc, char* argv[])
                      << "+Return to Main Menu (Press 'r')" << endl;
                 cin >> userChoice;
                 if (userChoice == 's') {
-                    //add search code
+                    Query q(theIndex);
                 }
                 else if(userChoice == 'p') {
                     dh.printStatistics(theIndex);

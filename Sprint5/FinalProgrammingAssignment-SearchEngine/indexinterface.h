@@ -3,6 +3,7 @@
 #define INDEXINTERFACE_H
 #include <fstream>
 #include "word.h"
+#include "porter2_stemmer.h"
 
 using namespace std;
 
