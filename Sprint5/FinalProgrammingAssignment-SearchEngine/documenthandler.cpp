@@ -176,7 +176,7 @@ void DocumentHandler::loadIndex(IndexInterface*& theIndex)
         throw exception();
 }
 
-//Function to print out information required for Monday's demo
+//Function to print out index statistics
 void DocumentHandler::printStatistics(IndexInterface*& theIndex)
 {
     cout << "Number of documents parsed: " << theIndex->getNumDocsParsed() << endl;
@@ -187,7 +187,7 @@ void DocumentHandler::printStatistics(IndexInterface*& theIndex)
 
 }
 
-//logic error - needs fixing
+//Function to set an average number of words per document to the index
 void DocumentHandler::setAverage(IndexInterface*& theIndex) {
     double count = 0;
     for(unsigned int i = 0; i < wordsPerFile.size(); i++) {
@@ -199,6 +199,7 @@ void DocumentHandler::setAverage(IndexInterface*& theIndex) {
 
 }
 
+//Function to clear any statistics when the index is cleared
 void DocumentHandler::clearStatistics() {
     totalNumberOfWordsIndexed = 0;
 }
