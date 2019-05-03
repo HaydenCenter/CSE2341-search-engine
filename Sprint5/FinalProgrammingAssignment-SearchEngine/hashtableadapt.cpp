@@ -3,6 +3,7 @@
 HashtableAdapt::HashtableAdapt()
 {
     numDocsParsed = 0;
+    averageWordsPerFile = 0;
 }
 
 HashtableAdapt::~HashtableAdapt() {}
@@ -15,7 +16,7 @@ int& HashtableAdapt::getNumDocsParsed() {
     return numDocsParsed;
 }
 
-int& HashtableAdapt::getAverageWordsPerFile() {
+double& HashtableAdapt::getAverageWordsPerFile() {
     return averageWordsPerFile;
 }
 
@@ -26,6 +27,8 @@ Word* HashtableAdapt::insert(Word& elementToAdd) {
 
 void HashtableAdapt::makeEmpty() {
     theIndex.makeEmpty();
+    numDocsParsed = 0;
+    averageWordsPerFile = 0;
 }
 
 bool HashtableAdapt::isEmpty() const {

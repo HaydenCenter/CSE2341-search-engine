@@ -27,11 +27,13 @@ public:
     void saveIndex(IndexInterface*&);
     void loadIndex(IndexInterface*&);
     void printStatistics(IndexInterface*&);
-    void getAverageWordsPerFile(IndexInterface*&);
+    void setAverage(IndexInterface*&);
+    void clearStatistics();
 private:
     vector<string> files;
     set<string> stopwords;
     vector<double> wordsPerFile;
+    double totalNumberOfWordsIndexed;
 };
 
 #endif // DOCUMENTHANDLER_H

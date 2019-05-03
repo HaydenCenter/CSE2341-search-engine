@@ -5,6 +5,7 @@ using namespace std;
 DocumentHandler::DocumentHandler()
 {
     getStopwords();
+    totalNumberOfWordsIndexed = 0;
 }
 
 //Function to read in stop words and save them to a set
@@ -49,6 +50,7 @@ void DocumentHandler::getFiles(char* c)
 //Function to parse all documents and save data into a map
 void DocumentHandler::parse(IndexInterface*& theIndex, char* inputFolder)
 {
+    wordsPerFile.clear();
     //Used to parse a small random sample
     srand(time(NULL));
     int x = 0;
@@ -115,6 +117,7 @@ void DocumentHandler::parse(IndexInterface*& theIndex, char* inputFolder)
     }
     cout << endl;
     theIndex->getNumDocsParsed() += numDocumentsParsed;
+    setAverage(theIndex);
 }
 
 //Function to save a copy of the persistant index to disk after parsing
@@ -128,6 +131,7 @@ void DocumentHandler::saveIndex(IndexInterface*& theIndex)
 
     outFile << theIndex->getNumDocsParsed() << endl;
     outFile << theIndex->getSize() << endl;
+    outFile << theIndex->getAverageWordsPerFile() << endl;
     theIndex->output(outFile);
     outFile.close();
     cout << "Index Saved" << endl;
@@ -144,6 +148,8 @@ void DocumentHandler::loadIndex(IndexInterface*& theIndex)
     int numWordsInIndex;
     inFile >> theIndex->getNumDocsParsed();
     inFile >> numWordsInIndex;
+    inFile >> theIndex->getAverageWordsPerFile();
+    totalNumberOfWordsIndexed = theIndex->getAverageWordsPerFile() * theIndex->getNumDocsParsed();
     string buffer;
     getline(inFile,buffer);
     getline(inFile,buffer);
@@ -175,17 +181,24 @@ void DocumentHandler::printStatistics(IndexInterface*& theIndex)
 {
     cout << "Number of documents parsed: " << theIndex->getNumDocsParsed() << endl;
     cout << "Number of unique words in the index: " << theIndex->getSize() << endl;
-    getAverageWordsPerFile(theIndex);
+//    setAverage(theIndex);
     cout << "Average number of words indexed per opinion: " << theIndex->getAverageWordsPerFile() << endl;
     //include top 50 most frequent words
 
 }
 
-void DocumentHandler::getAverageWordsPerFile(IndexInterface*& theIndex) {
-    double average = 0;
+//logic error - needs fixing
+void DocumentHandler::setAverage(IndexInterface*& theIndex) {
+    double count = 0;
     for(unsigned int i = 0; i < wordsPerFile.size(); i++) {
-        average = average + wordsPerFile.at(i);
+        count = count + wordsPerFile.at(i);
     }
-    average = average / wordsPerFile.size();
-    theIndex->getAverageWordsPerFile() = average;
+
+    totalNumberOfWordsIndexed = totalNumberOfWordsIndexed + count;
+    theIndex->getAverageWordsPerFile() = totalNumberOfWordsIndexed / theIndex->getNumDocsParsed();
+
+}
+
+void DocumentHandler::clearStatistics() {
+    totalNumberOfWordsIndexed = 0;
 }
