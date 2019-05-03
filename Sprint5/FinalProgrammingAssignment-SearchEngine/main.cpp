@@ -122,7 +122,6 @@ int main(int argc, char* argv[])
                      << "+Return to Main Menu (Press 'r')" << endl;
                 cin >> userChoice;
                 if (userChoice == 's') {
-                    //add search code
                     Query q(theIndex);
                 }
                 else if(userChoice == 'p') {

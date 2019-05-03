@@ -21,7 +21,7 @@ public:
     map<string,double> &getMap();
     void setWordText(string);
     void setMap(map<string,double>);
-    map<string,double> relevantDocuments(int);
+    vector<pair<string, double> > relevantDocuments(int);
 private:
     string wordText;
     map<string,double> freqMap;
