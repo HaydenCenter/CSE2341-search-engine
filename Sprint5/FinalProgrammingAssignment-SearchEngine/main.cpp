@@ -1,5 +1,7 @@
 #include <iostream>
+#include <string>
 #include <fstream>
+#include <sstream>
 #include "documenthandler.h"
 #include <json.hpp>
 #include <sstream>
