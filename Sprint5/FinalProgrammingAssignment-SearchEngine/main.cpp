@@ -88,10 +88,12 @@ int main(int argc, char* argv[])
                 else if(userChoice == 'c') {
                     cout << "Clearing the Index... ";
                     theIndex->makeEmpty();
+                    dh.clearStatistics();
                     cout << "Complete" << endl;
                     cout << "Would you like to create a new index? (Press 'y' for YES --- Press 'n' for NO)" << endl;
                     cin >> userChoice;
                     if(userChoice == 'y') {
+                        delete theIndex;
                         createIndex(theIndex,dh,argv[1]);
                     }
                 }

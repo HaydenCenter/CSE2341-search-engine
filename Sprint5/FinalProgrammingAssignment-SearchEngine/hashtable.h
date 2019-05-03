@@ -80,6 +80,7 @@ void Hashtable<K,V>::makeEmpty() {
     for(int i = 0; i < tableSize; i++) {
         table[i].clear();
     }
+    size = 0;
 }
 
 template <class K, class V>

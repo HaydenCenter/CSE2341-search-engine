@@ -14,7 +14,7 @@ class AvlTree : public IndexInterface
         ~AvlTree();
         int& getSize();
         int& getNumDocsParsed();
-        int& getAverageWordsPerFile();
+        double& getAverageWordsPerFile();
         const T& findMin() const;
         const T& findMax() const;
         bool contains(T&);
@@ -29,7 +29,7 @@ class AvlTree : public IndexInterface
         AvlNode<T>* root;
         int size;
         int numDocsParsed;
-        int averageWordsPerFile;
+        double averageWordsPerFile;
         int height(AvlNode<T>*) const;
         int max(int,int) const;
         AvlNode<T>* findMin(AvlNode<T>*);
@@ -53,6 +53,7 @@ AvlTree<T>::AvlTree()
     root = nullptr;
     size = 0;
     numDocsParsed = 0;
+    averageWordsPerFile = 0;
 }
 
 template<class T>
@@ -74,7 +75,7 @@ int& AvlTree<T>::getNumDocsParsed()
 }
 
 template<class T>
-int& AvlTree<T>::getAverageWordsPerFile()
+double& AvlTree<T>::getAverageWordsPerFile()
 {
     return averageWordsPerFile;
 }
@@ -115,6 +116,7 @@ void AvlTree<T>::makeEmpty()
     root = nullptr;
     size = 0;
     numDocsParsed = 0;
+    averageWordsPerFile = 0;
     cout << "Index Emptied" << endl;
 }
 
