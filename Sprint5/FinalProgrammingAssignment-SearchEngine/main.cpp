@@ -116,7 +116,7 @@ int main(int argc, char* argv[])
                             cout << "Select one: ";
                             int docChoice = -1;
                             cin >> docChoice;
-                            if(SRH.openFileInfo(docChoice + 1))
+                            if(SRH.openFileInfo(docChoice - 1))
                                 break;
                             else
                                 cout << "Please enter one of the accepted values" << endl;
