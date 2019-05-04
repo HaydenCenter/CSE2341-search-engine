@@ -91,9 +91,8 @@ int main(int argc, char* argv[])
         cout << "Select one: ";
         cin >> userChoice;
         if(userChoice == '1') {
-            cout << endl;
             while(true) {
-                cout << "Interactive Mode:" << endl;
+                cout << endl << "Interactive Mode:" << endl;
                 cout << "(1) - Search" << endl;
                 cout << "(2) - Print Statistics" << endl;
                 cout << "(3) - Return to Main Menu" << endl;
@@ -104,23 +103,34 @@ int main(int argc, char* argv[])
                     Query q(theIndex);
                     SearchResultHandler SRH(q.getRelevantFiles());
                     SRH.displaySearchResults();
-
                     cout << endl << "Would you like to open a result? (y/n) ";
-                    cin >> userChoice;
-                    cout << endl;
-                    if(userChoice == 'y')
+                    while(true)
                     {
-                        while(true)
+                        cin >> userChoice;
+                        cout << endl;
+                        if(userChoice == 'y')
                         {
-                            cout << "Which result would you like to open?" << endl;
-                            cout << "Select one: ";
-                            int docChoice = -1;
-                            cin >> docChoice;
-                            if(SRH.openFileInfo(docChoice - 1))
-                                break;
-                            else
-                                cout << "Please enter one of the accepted values" << endl;
+                            while(true)
+                            {
+                                cout << "Which result would you like to open?" << endl;
+                                cout << "Select one: ";
+                                int docChoice = -1;
+                                cin >> docChoice;
+                                if(SRH.openFileInfo(docChoice - 1))
+                                    break;
+                                else
+                                    cout << "Please enter one of the accepted values" << endl;
+                            }
                         }
+                        else if(userChoice == 'n')
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            cout << "Please enter one of the accepted values" << endl;
+                        }
+                        cout << endl << "Would you like to open another result> (y/n) ";
                     }
                 }
                 else if(userChoice == '2') {
@@ -133,7 +143,6 @@ int main(int argc, char* argv[])
                 else {
                     cout << "Please enter one of the accepted values" << endl;
                 }
-                cout << endl;
             }
         }
         else if(userChoice == '2') {
