@@ -17,6 +17,7 @@ public:
     Query(IndexInterface*&);
     vector<string> getRelevantFiles();
 private:
+    IndexInterface* theIndex;
     vector<string> queryWords;
     vector<string> notWords;
     vector<string> relevantFiles;
@@ -24,6 +25,10 @@ private:
     map<double,string> invertedRelevancyMap;
     vector<set<string>> querySets;
     vector<set<string>> notSets;
+    void singleSearch();
+    void andSearch();
+    void orSearch();
+    void notSearch();
 };
 
 #endif // QUERY_H

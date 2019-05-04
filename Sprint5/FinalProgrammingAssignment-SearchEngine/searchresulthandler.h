@@ -16,7 +16,7 @@ class SearchResultHandler
 public:
     SearchResultHandler(vector<string>);
     void displaySearchResults();
-    void openFileInfo();
+    bool openFileInfo(int);
 private:
     vector<string> fileNames;
 

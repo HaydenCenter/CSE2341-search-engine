@@ -102,6 +102,26 @@ int main(int argc, char* argv[])
                 if (userChoice == '1') {
                     cout << endl;
                     Query q(theIndex);
+                    SearchResultHandler SRH(q.getRelevantFiles());
+                    SRH.displaySearchResults();
+
+                    cout << endl << "Would you like to open a result? (y/n) ";
+                    cin >> userChoice;
+                    cout << endl;
+                    if(userChoice == 'y')
+                    {
+                        while(true)
+                        {
+                            cout << "Which result would you like to open?" << endl;
+                            cout << "Select one: ";
+                            int docChoice = -1;
+                            cin >> docChoice;
+                            if(SRH.openFileInfo(docChoice + 1))
+                                break;
+                            else
+                                cout << "Please enter one of the accepted values" << endl;
+                        }
+                    }
                 }
                 else if(userChoice == '2') {
                     cout << endl;

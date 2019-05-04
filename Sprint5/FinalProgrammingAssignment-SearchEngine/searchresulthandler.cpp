@@ -39,39 +39,27 @@ void SearchResultHandler::displaySearchResults() {
 }
 
 //Opens a specific file and prints out the first 100 words
-void SearchResultHandler::openFileInfo() {
-    cout << "Please indicate which file you would like to open by typing full file name & path: ";
-    while(true) {
-        string fileToOpen;
-        cin >> fileToOpen;
+bool SearchResultHandler::openFileInfo(int docNum) {
+    if(docNum < fileNames.size()) {
+        json j;
+        ifstream inFS;
+        inFS.open(fileNames[docNum]);
+        if(!inFS.is_open())
+            throw exception();
+        inFS >> j;
+        inFS.close();
+
+        string docText = j["plain_text"];
+        if(docText == "")
+            docText = j["html"];
+
+        for(int i = 0; i < 300; i++) {
+            cout << docText.at(i);
+        }
         cout << endl;
-        bool isPresent = false;
-        for(unsigned int i = 0; i < fileNames.size(); i++) {
-            if(fileToOpen == fileNames.at(i))
-                isPresent = true;
-        }
-
-        if(isPresent) {
-            json j;
-            ifstream inFS;
-            inFS.open(fileToOpen);
-            if(!inFS.is_open())
-                throw exception();
-            inFS >> j;
-            inFS.close();
-
-            string docText = j["plain_text"];
-            if(docText == "")
-                docText = j["html"];
-
-            for(int i = 0; i < 300; i++) {
-                cout << docText.at(i);
-            }
-            cout << endl;
-            break;
-        }
-        else {
-            cout << "Please enter an acceptable file name: ";
-        }
+        return true;
+    }
+    else {
+        return false;
     }
 }
