@@ -52,10 +52,6 @@ bool SearchResultHandler::openFileInfo(int docNum) {
         string docText = j["plain_text"];
         if(docText == "")
             docText = j["html"];
-
-//        for(int i = 0; i < 300; i++) {
-//            cout << docText.at(i);
-//        }
         int wordCount = 0;
         int charCount = 0;
         int bracketCount = 0;
