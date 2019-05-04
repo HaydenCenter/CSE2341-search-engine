@@ -23,6 +23,7 @@ private:
     map<string,double> relevancyMap;
     map<double,string> invertedRelevancyMap;
     vector<set<string>> querySets;
+    vector<set<string>> notSets;
 };
 
 #endif // QUERY_H

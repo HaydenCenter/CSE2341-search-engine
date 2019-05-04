@@ -115,7 +115,6 @@ void DocumentHandler::parse(IndexInterface*& theIndex, char* inputFolder)
         }
         wordsPerFile.push_back(numWords);
     }
-    cout << endl;
     theIndex->getNumDocsParsed() += numDocumentsParsed;
     setAverage(theIndex);
 }
