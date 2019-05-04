@@ -53,9 +53,17 @@ bool SearchResultHandler::openFileInfo(int docNum) {
         if(docText == "")
             docText = j["html"];
 
-        for(int i = 0; i < 300; i++) {
-            cout << docText.at(i);
+        int i = 0;
+        int k = 0;
+        while(i < 300) {
+            cout << docText.at(k);
+            if(docText.at(k) == ' ') {
+                i++;
+            }
+            k++;
         }
+
+
         cout << endl;
         return true;
     }
