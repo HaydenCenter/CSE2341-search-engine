@@ -53,10 +53,25 @@ bool SearchResultHandler::openFileInfo(int docNum) {
         if(docText == "")
             docText = j["html"];
 
-        for(int i = 0; i < 300; i++) {
-            cout << docText.at(i);
+//        for(int i = 0; i < 300; i++) {
+//            cout << docText.at(i);
+//        }
+        int wordCount = 0;
+        int charCount = 0;
+        int bracketCount = 0;
+        while(wordCount < 300)
+        {
+            if(docText[charCount] == '<')
+                bracketCount++;
+            if(bracketCount == 0)
+                cout << docText[charCount];
+            if(docText[charCount] == '>')
+                bracketCount--;
+            if(docText[charCount] == ' ')
+                wordCount++;
+            charCount++;
         }
-        cout << endl;
+        cout << "..." << endl;
         return true;
     }
     else {
