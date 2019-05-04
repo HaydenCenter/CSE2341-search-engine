@@ -7,7 +7,6 @@ Query::Query(IndexInterface*& indexArg)
     string query;
     cin.ignore();
     getline(cin,query);
-    cout << endl;
     istringstream iss(query);
     string word;
     bool NOT = false;
@@ -92,7 +91,7 @@ void Query::singleSearch()
     Word w(queryWords[0]);
     Word* wordPtr = theIndex->search(w);
     if(wordPtr == nullptr)
-        cout << "Word Not Found In Index" << endl;
+        cout << endl << "Word \"" << queryWords[0] << "\" Not Found In Index";
     else
         tfidf = wordPtr->relevantDocuments(theIndex->getNumDocsParsed());
     for(vector<pair<string,double>>::iterator iter = tfidf.begin(); iter != tfidf.end(); iter++)
@@ -108,7 +107,7 @@ void Query::andSearch()
         Word w(queryWords[i]);
         Word* wordPtr = theIndex->search(w);
         if(wordPtr == nullptr)
-            cout << queryWords[i] << " not found in the index" << endl;
+            cout << endl <<"Word \"" << queryWords[i] << "\" not found in the index";
         else
         {
             tfidf = wordPtr->relevantDocuments(theIndex->getNumDocsParsed());
@@ -145,7 +144,7 @@ void Query::orSearch()
         Word w(queryWords[i]);
         Word* wordPtr = theIndex->search(w);
         if(wordPtr == nullptr)
-            cout << queryWords[i] << " not found in the index" << endl;
+            cout << endl << "Word \"" << queryWords[i] << "\" not found in the index";
         else
         {
             tfidf = wordPtr->relevantDocuments(theIndex->getNumDocsParsed());
@@ -166,7 +165,7 @@ void Query::notSearch()
         Word w(notWords[i]);
         Word* wordPtr = theIndex->search(w);
         if(wordPtr == nullptr)
-            cout << notWords[i] << " not found in the index" << endl;
+            cout << "Word " << notWords[i] << " not found in the index" << endl;
         else
         {
             tfidf = wordPtr->relevantDocuments(theIndex->getNumDocsParsed());

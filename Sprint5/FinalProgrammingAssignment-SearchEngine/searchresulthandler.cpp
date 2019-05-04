@@ -8,7 +8,7 @@ SearchResultHandler::SearchResultHandler(vector<string> filesToSet)
 
 //Displays top 15 results and their court case name
 void SearchResultHandler::displaySearchResults() {
-    cout << "Search Results:" << endl;
+    cout << endl << "Search Results:" << endl;
     for(unsigned int i = 0; i < fileNames.size(); i ++) {
         json j;
         ifstream inFS;
@@ -67,7 +67,7 @@ bool SearchResultHandler::openFileInfo(int docNum) {
                 wordCount++;
             charCount++;
         }
-        cout << "..." << endl;
+        cout << "..." << endl << endl;
         return true;
     }
     else {

@@ -111,13 +111,11 @@ bool AvlTree<T>::isEmpty() const
 template<class T>
 void AvlTree<T>::makeEmpty()
 {
-    cout << "Emptying Index...";
     makeEmpty(root);
     root = nullptr;
     size = 0;
     numDocsParsed = 0;
     averageWordsPerFile = 0;
-    cout << "Index Emptied" << endl;
 }
 
 template<class T>

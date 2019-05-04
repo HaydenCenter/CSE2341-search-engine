@@ -101,37 +101,49 @@ int main(int argc, char* argv[])
                 if (userChoice == '1') {
                     cout << endl;
                     Query q(theIndex);
-                    SearchResultHandler SRH(q.getRelevantFiles());
-                    SRH.displaySearchResults();
-                    cout << endl << "Would you like to open a result? (y/n) ";
-                    while(true)
+                    if(q.getRelevantFiles().size() != 0)
                     {
-                        cin >> userChoice;
-                        cout << endl;
-                        if(userChoice == 'y')
+                        SearchResultHandler SRH(q.getRelevantFiles());
+                        SRH.displaySearchResults();
+                        bool RAN = false;
+                        while(true)
                         {
-                            while(true)
+                            cout << endl << "Would you like to open a result? (y/n) ";
+                            cin >> userChoice;
+                            if(userChoice == 'y')
                             {
-                                cout << "Which result would you like to open?" << endl;
-                                cout << "Select one: ";
-                                int docChoice = -1;
-                                cin >> docChoice;
-                                if(SRH.openFileInfo(docChoice - 1))
-                                    break;
-                                else
-                                    cout << "Please enter one of the accepted values" << endl;
+                                if(RAN)
+                                    SRH.displaySearchResults();
+                                while(true)
+                                {
+                                    cout << endl << "Which result would you like to open?" << endl;
+                                    cout << "Select one: ";
+                                    string choice;
+                                    cin >> choice;
+                                    int docChoice = -1;
+                                    if(choice.length() == 1)
+                                        docChoice = choice[0] - '0';
+                                    else if(choice[0] == '1')
+                                        docChoice = (choice[1] - '0') + 10;
+                                    if(SRH.openFileInfo(docChoice - 1))
+                                        break;
+                                    else
+                                        cout << "Please enter one of the accepted values" << endl;
+                                }
+                                RAN = true;
+                            }
+                            else if(userChoice == 'n')
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                cout << "Please enter one of the accepted values" << endl;
                             }
                         }
-                        else if(userChoice == 'n')
-                        {
-                            break;
-                        }
-                        else
-                        {
-                            cout << "Please enter one of the accepted values" << endl;
-                        }
-                        cout << endl << "Would you like to open another result> (y/n) ";
                     }
+                    else
+                        cout << "No results found" << endl;
                 }
                 else if(userChoice == '2') {
                     cout << endl;
@@ -175,12 +187,20 @@ int main(int argc, char* argv[])
                     cout << "Clearing the Index..." << endl;
                     theIndex->makeEmpty();
                     dh.clearStatistics();
-                    cout << "Index Cleared" << endl << endl;
-                    cout << "Would you like to build a new index? (y/n) ";
-                    cin >> userChoice;
-                    if(userChoice == 'y') {
-                        delete theIndex;
-                        createIndex(theIndex,dh,argv[1]);
+                    cout << "Index Cleared" << endl;
+                    while(true)
+                    {
+                        cout << endl << "Would you like to build a new index? (y/n) ";
+                        cin >> userChoice;
+                        if(userChoice == 'y')
+                        {
+                            delete theIndex;
+                            createIndex(theIndex,dh,argv[1]);
+                        }
+                        else if(userChoice == 'n')
+                            break;
+                        else
+                            cout << "Please enter one of the accepted values" << endl;
                     }
                 }
                 else if(userChoice == '3') {
