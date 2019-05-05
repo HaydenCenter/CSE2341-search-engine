@@ -60,7 +60,7 @@ void DocumentHandler::parse(IndexInterface*& theIndex, char* inputFolder)
     //Full Data Set:
     //for(unsigned int i = 0; i < files.size(); i++)
     //Sample Set:
-    for(int i = x; i < x + 100; i++)
+    for(int i = x; i < x + 10000; i++)
     {
         if(i % 100 == 0)
             cout << i << endl;
@@ -108,10 +108,10 @@ void DocumentHandler::parse(IndexInterface*& theIndex, char* inputFolder)
         }
         for(unordered_map<string,int>::iterator iter = freqMap.begin(); iter != freqMap.end(); iter++)
         {
-            map<string,double> tempMap;
+            map<string,pair<int,double>> tempMap;
             Word w(iter->first,tempMap);
             Word* wordPtr = theIndex->insert(w);
-            wordPtr->getMap().emplace(make_pair((inputFolder + id),(iter->second/numWords) * 10000));
+            wordPtr->getMap().emplace(make_pair((inputFolder + id),make_pair(iter->second,numWords)));
         }
         wordsPerFile.push_back(numWords);
     }
@@ -157,14 +157,16 @@ void DocumentHandler::loadIndex(IndexInterface*& theIndex)
         istringstream iss(buffer);
         string temp;
         iss >> temp;
-        map<string,double> tempMap;
+        map<string,pair<int,double>> tempMap;
         string page;
         while(iss >> page)
         {
-            double freq;
+            int freq;
+            double numWords;
             iss >> freq;
+            iss >> numWords;
 
-            tempMap.emplace(make_pair(page,freq));
+            tempMap.emplace(make_pair(page,make_pair(freq,numWords)));
         }
         Word w(temp,tempMap);
         theIndex->insert(w);
@@ -178,12 +180,15 @@ void DocumentHandler::loadIndex(IndexInterface*& theIndex)
 //Function to print out index statistics
 void DocumentHandler::printStatistics(IndexInterface*& theIndex)
 {
-    cout << "Number of documents parsed: " << theIndex->getNumDocsParsed() << endl;
+    cout << "50 most frequent words: " << endl;
+    vector<pair<int,Word*>> result = theIndex->findMostFrequentWords();
+    for(unsigned int i = 0; i < result.size(); i++)
+    {
+        cout << i+1 << ": \"" << result[i].second->getWordText() << "\" - " << result[i].first << endl;
+    }
+    cout << "Number of opinions indexed: " << theIndex->getNumDocsParsed() << endl;
     cout << "Number of unique words in the index: " << theIndex->getSize() << endl;
-//    setAverage(theIndex);
     cout << "Average number of words indexed per opinion: " << theIndex->getAverageWordsPerFile() << endl;
-    //include top 50 most frequent words
-
 }
 
 //Function to set an average number of words per document to the index

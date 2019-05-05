@@ -2,6 +2,7 @@
 #define AVLTREE_H
 #include "avlnode.h"
 #include <stdexcept>
+#include <vector>
 #include "indexinterface.h"
 
 using namespace std;
@@ -25,11 +26,13 @@ class AvlTree : public IndexInterface
         int count();
         void print();
         void output(ofstream&);
+        vector<pair<int,T*>> findMostFrequentWords();
     private:
         AvlNode<T>* root;
         int size;
         int numDocsParsed;
         double averageWordsPerFile;
+        map<int,T*> wordFrequencyMap;
         int height(AvlNode<T>*) const;
         int max(int,int) const;
         AvlNode<T>* findMin(AvlNode<T>*);
@@ -45,6 +48,7 @@ class AvlTree : public IndexInterface
         void rotateWithRightChild(AvlNode<T>*&);
         void doubleWithLeftChild(AvlNode<T>*&);
         void doubleWithRightChild(AvlNode<T>*&);
+        void findMostFrequentWords(AvlNode<T>*&);
 };
 
 template<class T>
@@ -146,6 +150,22 @@ template<class T>
 void AvlTree<T>::output(ofstream& outFile)
 {
     return output(root,outFile);
+}
+
+template<class T>
+vector<pair<int,T*>> AvlTree<T>::findMostFrequentWords()
+{
+    findMostFrequentWords(root);
+    int count = 0;
+    vector<pair<int,T*>> result;
+    for(auto iter = wordFrequencyMap.rbegin(); iter != wordFrequencyMap.rend(); iter++)
+    {
+        if(count == 50)
+            break;
+        result.push_back(make_pair(iter->first,iter->second));
+        count++;
+    }
+    return result;
 }
 
 template<class T>
@@ -323,6 +343,17 @@ void AvlTree<T>::doubleWithRightChild(AvlNode<T>*& k1)
 {
     rotateWithLeftChild(k1->right);
     rotateWithRightChild(k1);
+}
+
+template<class T>
+void AvlTree<T>::findMostFrequentWords(AvlNode<T>*& node)
+{
+    if(node)
+    {
+        wordFrequencyMap.emplace(make_pair(node->element.getTotalFrequency(),&(node->element)));
+        findMostFrequentWords(node->left);
+        findMostFrequentWords(node->right);
+    }
 }
 
 #endif // AVLTREE_H

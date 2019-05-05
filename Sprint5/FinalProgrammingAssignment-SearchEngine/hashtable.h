@@ -21,6 +21,7 @@ public:
     V* search(K,V);
     void print();
     void output(ofstream&);
+    vector<pair<int,V*>> findMostFrequentWords();
 private:
     void rehash();
     vector<pair<K,V>>* table;
@@ -129,6 +130,27 @@ void Hashtable<K,V>::output(ofstream& outFS) {
             outFS << table[i].at(j).second << endl;
         }
     }
+}
+
+template <class K, class V>
+vector<pair<int,V*>> Hashtable<K,V>::findMostFrequentWords()
+{
+    map<int,V*> freqMap;
+    vector<pair<int,V*>> result;
+    for(int i = 0; i < tableSize; i++) {
+        for(unsigned int j = 0; j < table[i].size(); j++) {
+            freqMap.emplace(make_pair(table[i].at(j).second.getTotalFrequency(),&(table[i].at(j).second)));
+        }
+    }
+    int count = 0;
+    for(auto iter = freqMap.rbegin(); iter != freqMap.rend(); iter++)
+    {
+        if(count == 50)
+            break;
+        result.push_back(make_pair(iter->first,iter->second));
+        count++;
+    }
+    return result;
 }
 
 #endif // HASHTABLE_H

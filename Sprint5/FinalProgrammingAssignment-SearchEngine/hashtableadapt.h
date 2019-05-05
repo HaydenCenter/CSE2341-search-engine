@@ -18,6 +18,7 @@ public:
     Word* search(Word);
     void print();
     void output(ofstream&);
+    vector<pair<int,Word*>> findMostFrequentWords();
 private:
     Hashtable<string,Word> theIndex;
     int numDocsParsed;
