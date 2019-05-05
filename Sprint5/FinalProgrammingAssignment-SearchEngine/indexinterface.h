@@ -22,6 +22,7 @@ class IndexInterface
         virtual Word* search(Word) = 0;
         virtual void print() = 0;
         virtual void output(ofstream&) = 0;
+        virtual vector<pair<int,Word*>> findMostFrequentWords() = 0;
 };
 
 #endif // INDEXINTERFACE_H

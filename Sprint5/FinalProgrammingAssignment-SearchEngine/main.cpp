@@ -196,6 +196,7 @@ int main(int argc, char* argv[])
                         {
                             delete theIndex;
                             createIndex(theIndex,dh,argv[1]);
+                            break;
                         }
                         else if(userChoice == 'n')
                             break;

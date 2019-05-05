@@ -12,19 +12,20 @@ class Word
 public:
     Word();
     Word(string);
-    Word(string,map<string,double>);
+    Word(string,map<string,pair<int,double>>);
     bool operator==(const Word) const;
     bool operator<(const Word) const;
     bool operator>(const Word) const;
     friend ostream& operator<<(ostream&, const Word&);
     string& getWordText();
-    map<string,double> &getMap();
+    map<string,pair<int,double>>& getMap();
     void setWordText(string);
-    void setMap(map<string,double>);
-    vector<pair<string, double> > relevantDocuments(int);
+    void setMap(map<string,pair<int,double>>);
+    vector<pair<string,double>> relevantDocuments(int);
+    int getTotalFrequency();
 private:
     string wordText;
-    map<string,double> freqMap;
+    map<string,pair<int,double>> freqMap;
 };
 
 #endif // WORD_H

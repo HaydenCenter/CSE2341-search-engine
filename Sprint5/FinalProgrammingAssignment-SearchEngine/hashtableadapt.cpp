@@ -50,3 +50,8 @@ void HashtableAdapt::print() {
 void HashtableAdapt::output(ofstream& outFS) {
     theIndex.output(outFS);
 }
+
+vector<pair<int,Word*>> HashtableAdapt::findMostFrequentWords()
+{
+    return theIndex.findMostFrequentWords();
+}
