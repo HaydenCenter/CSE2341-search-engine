@@ -55,7 +55,7 @@ bool SearchResultHandler::openFileInfo(int docNum) {
         int wordCount = 0;
         int charCount = 0;
         int bracketCount = 0;
-        while(wordCount < 300)
+        while(wordCount < 300 && charCount < docText.length())
         {
             if(docText[charCount] == '<')
                 bracketCount++;
