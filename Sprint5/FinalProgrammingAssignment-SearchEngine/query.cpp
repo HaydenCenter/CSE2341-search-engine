@@ -28,6 +28,7 @@ Query::Query(IndexInterface*& indexArg)
             }
         }
     }
+    auto start = high_resolution_clock::now();
     if(queryWords.size() == 1 && notWords.size() == 0)
     {
         singleSearch();
@@ -83,6 +84,9 @@ Query::Query(IndexInterface*& indexArg)
         relevantFiles.push_back(iter->second);
         count++;
     }
+    auto end = high_resolution_clock::now();
+    auto duration = duration_cast<microseconds>(end - start);
+    cout << "Runtime: " << duration.count()/1000000.0 << " seconds" << endl;
 }
 
 void Query::singleSearch()

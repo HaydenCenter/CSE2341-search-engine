@@ -5,11 +5,12 @@
 #include <sstream>
 #include <set>
 #include <algorithm>
+#include <chrono>
 #include "indexinterface.h"
 #include "word.h"
 #include "searchresulthandler.h"
 
-using namespace std;
+using namespace std::chrono;
 
 class Query
 {
